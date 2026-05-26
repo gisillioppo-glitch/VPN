@@ -1,0 +1,30 @@
+services:
+  outline-server:
+    image: quay.io/outline/shadowbox:stable
+    container_name: outline-server
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      SB_API_PORT: "${OUTLINE_API_PORT:-8443}"
+      SB_API_PREFIX: "${OUTLINE_API_PREFIX}"
+      SB_DEFAULT_SERVER_NAME: "${OUTLINE_SERVER_NAME:-self-hosted-outline}"
+      SB_PUBLIC_IP: "${OUTLINE_HOSTNAME}"
+      SB_METRICS_URL: ""
+      SB_STATE_DIR: "/opt/outline/persisted-state"
+      SB_CERTIFICATE_FILE: "/opt/outline/persisted-state/shadowbox-selfsigned.crt"
+      SB_PRIVATE_KEY_FILE: "/opt/outline/persisted-state/shadowbox-selfsigned.key"
+      LOG_LEVEL: "info"
+    ports:
+      - "${OUTLINE_API_PORT:-8443}:${OUTLINE_API_PORT:-8443}/tcp"
+      - "${OUTLINE_KEYS_PORT:-443}:${OUTLINE_KEYS_PORT:-443}/tcp"
+      - "${OUTLINE_KEYS_PORT:-443}:${OUTLINE_KEYS_PORT:-443}/udp"
+    volumes:
+      - ./data/persisted-state:/root/shadowbox/persisted-state
+      - ./data/persisted-state:/opt/outline/persisted-state
+    healthcheck:
+      test: ["CMD-SHELL", "test -f /opt/outline/persisted-state/shadowbox_server_config.json || test -f /root/shadowbox/persisted-state/shadowbox_server_config.json"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 45s
