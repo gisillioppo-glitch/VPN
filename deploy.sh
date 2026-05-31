@@ -56,7 +56,7 @@ chmod 600 exports/shadowbox_server_config.json
 
 api_cert_sha256="$(openssl x509 -in data/persisted-state/shadowbox-selfsigned.crt -noout -fingerprint -sha256 | cut -d= -f2 | tr -d ':')"
 public_api_url="https://${OUTLINE_HOSTNAME}:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}"
-local_api_url="https://127.0.0.1:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}"
+local_api_url="https://[::1]:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}"
 
 cat > exports/outline_manager_access.txt <<EOF
 Paste this into Outline Manager:

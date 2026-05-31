@@ -28,7 +28,7 @@ fi
 
 if [ -n "${OUTLINE_API_PREFIX:-}" ]; then
   OUTLINE_API_PREFIX="$(printf '%s' "$OUTLINE_API_PREFIX" | sed 's#^/*##')"
-  curl -fsSk "https://127.0.0.1:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}/server" >/dev/null \
+  curl -g -fsSk "https://[::1]:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}/server" >/dev/null \
     && log "Management API responded" \
     || log "Management API check failed locally; inspect Docker logs"
 fi
