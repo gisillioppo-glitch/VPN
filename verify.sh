@@ -28,9 +28,19 @@ fi
 
 if [ -n "${OUTLINE_API_PREFIX:-}" ]; then
   OUTLINE_API_PREFIX="$(printf '%s' "$OUTLINE_API_PREFIX" | sed 's#^/*##')"
-  curl -g -fsSk "https://[::1]:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}/server" >/dev/null \
-    && log "Management API responded" \
-    || log "Management API check failed locally; inspect Docker logs"
+  api_ready=false
+  for i in $(seq 1 30); do
+    if curl -g -fsSk "https://[::1]:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}/server" >/dev/null 2>&1; then
+      api_ready=true
+      break
+    fi
+    sleep 2
+  done
+  if [ "$api_ready" = "true" ]; then
+    log "Management API responded"
+  else
+    log "Management API check failed locally after waiting; inspect Docker logs"
+  fi
 fi
 
 log "Verification complete"

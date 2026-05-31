@@ -58,6 +58,15 @@ api_cert_sha256="$(openssl x509 -in data/persisted-state/shadowbox-selfsigned.cr
 public_api_url="https://${OUTLINE_HOSTNAME}:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}"
 local_api_url="https://[::1]:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}"
 
+log "Waiting for Outline management API"
+for i in $(seq 1 60); do
+  if curl -g -fsSk "${local_api_url}/server" >/dev/null 2>&1; then
+    break
+  fi
+  sleep 2
+  [ "$i" -lt 60 ] || die "Outline management API did not become ready in time."
+done
+
 cat > exports/outline_manager_access.txt <<EOF
 Paste this into Outline Manager:
 {"apiUrl":"${public_api_url}","certSha256":"${api_cert_sha256}"}
