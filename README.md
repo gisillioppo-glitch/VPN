@@ -168,6 +168,7 @@ sudo bash verify.sh
 - `install_cron.sh`: optional daily backup and weekly update
 - `docker-compose.yml`: Outline container definition
 - `windows_client_setup.md`: Windows client workflow
+- `aws_lightsail_setup.md`: step-by-step AWS Lightsail deployment guide
 - `troubleshooting.md`: common fixes
 - `security_notes.md`: risk and hardening notes
 
