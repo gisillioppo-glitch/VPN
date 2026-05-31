@@ -57,7 +57,7 @@ create_env() {
   public_ip="$(curl -fsS --max-time 10 https://api.ipify.org || true)"
   cp .env.example .env
   sed -i "s/^OUTLINE_HOSTNAME=.*/OUTLINE_HOSTNAME=${public_ip}/" .env
-  sed -i "s#^OUTLINE_API_PREFIX=.*#OUTLINE_API_PREFIX=/$(openssl rand -hex 24)#" .env
+  sed -i "s#^OUTLINE_API_PREFIX=.*#OUTLINE_API_PREFIX=$(openssl rand -hex 24)#" .env
   log "Created .env. Review OUTLINE_HOSTNAME and ADMIN_CIDR before production use."
 }
 

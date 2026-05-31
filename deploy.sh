@@ -16,6 +16,20 @@ die() { printf '[deploy] ERROR: %s\n' "$*" >&2; exit 1; }
 OUTLINE_API_PORT="${OUTLINE_API_PORT:-8443}"
 OUTLINE_KEYS_PORT="${OUTLINE_KEYS_PORT:-443}"
 OUTLINE_HOSTNAME="${OUTLINE_HOSTNAME:-}"
+OUTLINE_API_PREFIX="${OUTLINE_API_PREFIX:-}"
+
+if [ -z "$OUTLINE_API_PREFIX" ]; then
+  OUTLINE_API_PREFIX="$(openssl rand -hex 24)"
+  if grep -q '^OUTLINE_API_PREFIX=' .env; then
+    sed -i "s#^OUTLINE_API_PREFIX=.*#OUTLINE_API_PREFIX=${OUTLINE_API_PREFIX}#" .env
+  else
+    printf '\nOUTLINE_API_PREFIX=%s\n' "$OUTLINE_API_PREFIX" >> .env
+  fi
+elif printf '%s' "$OUTLINE_API_PREFIX" | grep -q '^/'; then
+  OUTLINE_API_PREFIX="$(printf '%s' "$OUTLINE_API_PREFIX" | sed 's#^/*##')"
+  sed -i "s#^OUTLINE_API_PREFIX=.*#OUTLINE_API_PREFIX=${OUTLINE_API_PREFIX}#" .env
+  log "Normalized OUTLINE_API_PREFIX without a leading slash"
+fi
 
 if [ -z "$OUTLINE_HOSTNAME" ]; then
   OUTLINE_HOSTNAME="$(curl -fsS --max-time 10 https://api.ipify.org || true)"
@@ -25,7 +39,7 @@ fi
 
 log "Starting Outline container"
 docker compose pull
-docker compose up -d
+docker compose up -d --force-recreate
 
 log "Waiting for Outline state"
 for i in $(seq 1 30); do
@@ -41,8 +55,8 @@ docker exec outline-server sh -c 'cat /opt/outline/persisted-state/shadowbox_ser
 chmod 600 exports/shadowbox_server_config.json
 
 api_cert_sha256="$(openssl x509 -in data/persisted-state/shadowbox-selfsigned.crt -noout -fingerprint -sha256 | cut -d= -f2 | tr -d ':')"
-public_api_url="https://${OUTLINE_HOSTNAME}:${OUTLINE_API_PORT}${OUTLINE_API_PREFIX}"
-local_api_url="https://127.0.0.1:${OUTLINE_API_PORT}${OUTLINE_API_PREFIX}"
+public_api_url="https://${OUTLINE_HOSTNAME}:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}"
+local_api_url="https://127.0.0.1:${OUTLINE_API_PORT}/${OUTLINE_API_PREFIX}"
 
 cat > exports/outline_manager_access.txt <<EOF
 Paste this into Outline Manager:
