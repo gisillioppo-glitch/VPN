@@ -67,18 +67,18 @@ EOF
 chmod 600 exports/outline_manager_access.txt
 
 log "Setting server hostname, default access-key port, and display name"
-curl -fsSk -X PUT "${local_api_url}/server/hostname-for-access-keys" \
+curl -g -fsSk -X PUT "${local_api_url}/server/hostname-for-access-keys" \
   -H 'Content-Type: application/json' \
   -d "$(jq -cn --arg hostname "$OUTLINE_HOSTNAME" '{hostname:$hostname}')" >/dev/null || log "Could not set hostname through API"
-curl -fsSk -X PUT "${local_api_url}/server/port-for-new-access-keys" \
+curl -g -fsSk -X PUT "${local_api_url}/server/port-for-new-access-keys" \
   -H 'Content-Type: application/json' \
   -d "$(jq -cn --argjson port "$OUTLINE_KEYS_PORT" '{port:$port}')" >/dev/null || log "Could not set default access-key port through API"
-curl -fsSk -X PUT "${local_api_url}/name" \
+curl -g -fsSk -X PUT "${local_api_url}/name" \
   -H 'Content-Type: application/json' \
   -d "$(jq -cn --arg name "${OUTLINE_SERVER_NAME:-self-hosted-outline}" '{name:$name}')" >/dev/null || log "Could not set server name through API"
 
 log "Creating a default client access key"
-access_key_json="$(curl -fsSk -X POST "${local_api_url}/access-keys" -H 'Content-Type: application/json' -d '{"name":"windows-client-1"}' || true)"
+access_key_json="$(curl -g -fsSk -X POST "${local_api_url}/access-keys" -H 'Content-Type: application/json' -d '{"name":"windows-client-1"}' || true)"
 if [ -n "$access_key_json" ] && printf '%s' "$access_key_json" | jq -e '.accessUrl' >/dev/null 2>&1; then
   printf '%s\n' "$access_key_json" > exports/windows-client-1.json
   jq -r '.accessUrl' exports/windows-client-1.json > exports/windows-client-1-access-url.txt
