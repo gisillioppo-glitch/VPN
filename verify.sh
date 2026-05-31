@@ -26,10 +26,10 @@ else
   fail "Outline persisted state missing"
 fi
 
-if [ -n "${OUTLINE_HOSTNAME:-}" ] && [ -n "${OUTLINE_API_PREFIX:-}" ]; then
-  curl -fsSk "https://${OUTLINE_HOSTNAME}:${OUTLINE_API_PORT}${OUTLINE_API_PREFIX}/server" >/dev/null \
+if [ -n "${OUTLINE_API_PREFIX:-}" ]; then
+  curl -fsSk "https://127.0.0.1:${OUTLINE_API_PORT}${OUTLINE_API_PREFIX}/server" >/dev/null \
     && log "Management API responded" \
-    || log "Management API check failed from this host; verify cloud firewall/security-list rules"
+    || log "Management API check failed locally; inspect Docker logs"
 fi
 
 log "Verification complete"

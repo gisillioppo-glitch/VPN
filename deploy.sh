@@ -41,29 +41,30 @@ docker exec outline-server sh -c 'cat /opt/outline/persisted-state/shadowbox_ser
 chmod 600 exports/shadowbox_server_config.json
 
 api_cert_sha256="$(openssl x509 -in data/persisted-state/shadowbox-selfsigned.crt -noout -fingerprint -sha256 | cut -d= -f2 | tr -d ':')"
-api_url="https://${OUTLINE_HOSTNAME}:${OUTLINE_API_PORT}${OUTLINE_API_PREFIX}"
+public_api_url="https://${OUTLINE_HOSTNAME}:${OUTLINE_API_PORT}${OUTLINE_API_PREFIX}"
+local_api_url="https://127.0.0.1:${OUTLINE_API_PORT}${OUTLINE_API_PREFIX}"
 
 cat > exports/outline_manager_access.txt <<EOF
 Paste this into Outline Manager:
-{"apiUrl":"${api_url}","certSha256":"${api_cert_sha256}"}
+{"apiUrl":"${public_api_url}","certSha256":"${api_cert_sha256}"}
 
 Keep this file private. It allows administration of this Outline server.
 EOF
 chmod 600 exports/outline_manager_access.txt
 
 log "Setting server hostname, default access-key port, and display name"
-curl -fsSk -X PUT "${api_url}/server/hostname-for-access-keys" \
+curl -fsSk -X PUT "${local_api_url}/server/hostname-for-access-keys" \
   -H 'Content-Type: application/json' \
   -d "$(jq -cn --arg hostname "$OUTLINE_HOSTNAME" '{hostname:$hostname}')" >/dev/null || log "Could not set hostname through API"
-curl -fsSk -X PUT "${api_url}/server/port-for-new-access-keys" \
+curl -fsSk -X PUT "${local_api_url}/server/port-for-new-access-keys" \
   -H 'Content-Type: application/json' \
   -d "$(jq -cn --argjson port "$OUTLINE_KEYS_PORT" '{port:$port}')" >/dev/null || log "Could not set default access-key port through API"
-curl -fsSk -X PUT "${api_url}/name" \
+curl -fsSk -X PUT "${local_api_url}/name" \
   -H 'Content-Type: application/json' \
   -d "$(jq -cn --arg name "${OUTLINE_SERVER_NAME:-self-hosted-outline}" '{name:$name}')" >/dev/null || log "Could not set server name through API"
 
 log "Creating a default client access key"
-access_key_json="$(curl -fsSk -X POST "${api_url}/access-keys" -H 'Content-Type: application/json' -d '{"name":"windows-client-1"}' || true)"
+access_key_json="$(curl -fsSk -X POST "${local_api_url}/access-keys" -H 'Content-Type: application/json' -d '{"name":"windows-client-1"}' || true)"
 if [ -n "$access_key_json" ] && printf '%s' "$access_key_json" | jq -e '.accessUrl' >/dev/null 2>&1; then
   printf '%s\n' "$access_key_json" > exports/windows-client-1.json
   jq -r '.accessUrl' exports/windows-client-1.json > exports/windows-client-1-access-url.txt
