@@ -14,6 +14,16 @@ npm install
 cp .env.example .env
 ```
 
+On Ubuntu 22.04, `sqlite3` may need to be compiled locally so the native module
+matches the server glibc version:
+
+```bash
+sudo apt-get update
+sudo NEEDRESTART_MODE=a DEBIAN_FRONTEND=noninteractive apt-get install -y \
+  build-essential python3 make g++
+npm rebuild sqlite3 --build-from-source
+```
+
 Edit `.env`:
 
 ```text
@@ -149,5 +159,6 @@ curl -X POST \
 - Keep `ADMIN_TOKEN` long and random.
 - Put this behind an admin-only network or auth layer for early testing.
 - Do not commit `.env`.
+- Do not commit `backend/data/`; it contains the local customer database.
 - Do not log access URLs in production.
 - For payment automation, create keys only after verified payment webhooks.
