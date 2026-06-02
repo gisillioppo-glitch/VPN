@@ -1,11 +1,14 @@
 const canvas = document.querySelector("#starfield");
 const ctx = canvas.getContext("2d");
 const portal = document.querySelector(".portal");
-const modules = document.querySelectorAll(".holo-module");
+const modules = document.querySelectorAll(".holo-module, .void-card, .mission-dashboard");
 const tabs = document.querySelectorAll("[data-tab]");
 const panels = document.querySelectorAll("[data-panel]");
 const copyButton = document.querySelector("#copyKey");
 const accessKey = document.querySelector("#accessKey");
+const orbitNodes = document.querySelectorAll(".orbit-node");
+const nodeReadout = document.querySelector(".node-readout");
+const serverNodes = document.querySelectorAll(".server-node");
 
 let stars = [];
 let pointerX = 0;
@@ -64,6 +67,32 @@ const observer = new IntersectionObserver(
 );
 
 modules.forEach((module) => observer.observe(module));
+
+serverNodes.forEach((node) => {
+  const load = Number(node.dataset.load || 0);
+  node.style.setProperty("--load", `${Math.max(0, Math.min(load, 100))}%`);
+});
+
+const barObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      entry.target.classList.toggle("visible", entry.isIntersecting);
+    });
+  },
+  { threshold: 0.34 }
+);
+
+serverNodes.forEach((node) => barObserver.observe(node));
+
+orbitNodes.forEach((node) => {
+  node.addEventListener("click", () => {
+    orbitNodes.forEach((item) => item.classList.toggle("active", item === node));
+    if (nodeReadout) {
+      const label = node.dataset.node || "ORBIT";
+      nodeReadout.innerHTML = `<strong>${label}</strong> Secure gateway path synced through the ORBIT control mesh.`;
+    }
+  });
+});
 
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {

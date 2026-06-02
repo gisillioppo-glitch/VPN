@@ -87,150 +87,125 @@
         </div>
       </section>
 
-      <section class="feature-band orbital-features" id="features">
-        <article class="holo-module orbit-feature shield-world">
-          <span class="module-orbit" aria-hidden="true">
-            <span class="feature-planet"></span>
-            <span class="feature-ring"></span>
-          </span>
-          <h2>Encrypted by default</h2>
-          <p>Your tunnel is built around hardened access keys, restricted admin surfaces, and secure server controls.</p>
-        </article>
-        <article class="holo-module orbit-feature network-world">
-          <span class="module-orbit" aria-hidden="true">
-            <span class="feature-planet"></span>
-            <span class="feature-ring"></span>
-          </span>
-          <h2>Gateway constellations</h2>
-          <p>Launch from a verified US East node today, then expand into regional gateways as the network grows.</p>
-        </article>
-        <article class="holo-module orbit-feature speed-world">
-          <span class="module-orbit" aria-hidden="true">
-            <span class="feature-planet"></span>
-            <span class="feature-ring"></span>
-          </span>
-          <h2>Low-drag routing</h2>
-          <p>A lean Outline stack keeps the path simple, stable, and tuned around the trusted 443 transport lane.</p>
-        </article>
-        <article class="holo-module orbit-feature privacy-world">
-          <span class="module-orbit" aria-hidden="true">
-            <span class="feature-planet"></span>
-            <span class="feature-ring"></span>
-          </span>
-          <h2>Quiet by design</h2>
-          <p>Minimal operational data, clear privacy boundaries, and revocable keys instead of noisy account sprawl.</p>
-        </article>
-      </section>
-
-      <section class="section network-section" id="network">
-        <div class="section-copy">
-          <p class="eyebrow">Global network visualization</p>
-          <h2>Route Through Your Private Orbit</h2>
-          <p>
-            Earth is the public internet. ORBIT is the private tunnel around it:
-            a controlled path from your device to a trusted gateway.
-          </p>
-        </div>
-        <div class="network-visual">
-          <div class="network-earth">
-            <span class="network-core">
-              <span class="orbit-logo-mark small"></span>
-              <strong>ORBIT</strong>
-            </span>
-            <span class="arc arc-one"></span>
-            <span class="arc arc-two"></span>
-            <span class="arc arc-three"></span>
-            <span class="server-dot us">US</span>
-            <span class="server-dot eu">EU</span>
-            <span class="server-dot latam">CR</span>
-          </div>
-          <div class="network-stats">
-            <div><span>Active gateway</span><strong>35.172.31.23</strong></div>
-            <div><span>Transport</span><strong>443 TCP/UDP</strong></div>
-            <div><span>Server health</span><strong>Online</strong></div>
-          </div>
+      <section class="void-section" id="features">
+        <p class="eyebrow centered">Core systems</p>
+        <h2>Engineered for the void.</h2>
+        <div class="void-grid">
+          <article class="void-card">
+            <span>01 / shield</span>
+            <h3>Encrypted by Default</h3>
+            <p>Modern encrypted access keys protect the tunnel before traffic leaves your device.</p>
+          </article>
+          <article class="void-card">
+            <span>02 / gateways</span>
+            <h3>Gateway Constellations</h3>
+            <p>Start with one verified gateway, then scale into regional relays as demand grows.</p>
+          </article>
+          <article class="void-card">
+            <span>03 / velocity</span>
+            <h3>Low Drag Routing</h3>
+            <p>A lean Outline-based stack keeps the route simple, stable, and optimized around port 443.</p>
+          </article>
+          <article class="void-card">
+            <span>04 / silence</span>
+            <h3>Quiet by Design</h3>
+            <p>No browsing logs, minimal operational records, and revocable access for every customer.</p>
+          </article>
         </div>
       </section>
 
-      <section class="section globe-section">
-        <div class="globe-shell">
-          <div class="mini-globe" aria-hidden="true">
-            <span class="orbit-line"></span>
-            <span class="orbit-line two"></span>
-            <span class="orbit-line three"></span>
-          </div>
-          <div>
-            <p class="eyebrow">Interactive globe roadmap</p>
-            <h2>Launch New Regions Without Rebuilding The Product</h2>
-            <p>
-              The MVP starts with one hardened gateway. The next backend phase
-              can assign users to gateways by region, plan, or capacity.
-            </p>
+      <section class="network-map-section" id="network">
+        <p class="eyebrow centered">Orbital network</p>
+        <h2>One Network.<br />Zero Borders.</h2>
+        <p class="network-lede">
+          One verified US East gateway today. A clean path to multi-region expansion tomorrow.
+        </p>
+        <div class="orbit-map" aria-label="Interactive ORBIT network map">
+          <svg class="orbit-lines" viewBox="0 0 1000 520" aria-hidden="true">
+            <line x1="500" y1="260" x2="160" y2="190" />
+            <line x1="500" y1="260" x2="235" y2="318" />
+            <line x1="500" y1="260" x2="355" y2="128" />
+            <line x1="500" y1="260" x2="450" y2="402" />
+            <line x1="500" y1="260" x2="615" y2="118" />
+            <line x1="500" y1="260" x2="705" y2="354" />
+            <line x1="500" y1="260" x2="805" y2="210" />
+            <line x1="500" y1="260" x2="860" y2="330" />
+            <line x1="500" y1="260" x2="290" y2="238" />
+            <line x1="500" y1="260" x2="640" y2="255" />
+          </svg>
+          <button class="orbit-node core" type="button" data-node="ORBIT Core">
+            <span class="orbit-logo-mark small"></span>
+          </button>
+          <button class="orbit-node n1" type="button" data-node="Los Angeles">LAX</button>
+          <button class="orbit-node n2" type="button" data-node="Costa Rica">SJO</button>
+          <button class="orbit-node n3" type="button" data-node="New York">NYC</button>
+          <button class="orbit-node n4" type="button" data-node="Sao Paulo">GRU</button>
+          <button class="orbit-node n5" type="button" data-node="Frankfurt">FRA</button>
+          <button class="orbit-node n6" type="button" data-node="Tokyo">TYO</button>
+          <button class="orbit-node n7" type="button" data-node="London">LHR</button>
+          <button class="orbit-node n8" type="button" data-node="Singapore">SIN</button>
+          <button class="orbit-node n9" type="button" data-node="Miami">MIA</button>
+          <button class="orbit-node n10" type="button" data-node="Madrid">MAD</button>
+          <div class="node-readout">
+            <span>selected relay</span>
+            <strong id="nodeReadout">ORBIT Core</strong>
           </div>
         </div>
       </section>
 
-      <section class="section control-section" id="control">
-        <div class="section-copy">
-          <p class="eyebrow">Mission Control</p>
-          <h2>Operate Like A Real Network</h2>
-          <p>
-            A customer portal should create, rotate, and revoke access keys from
-            a private backend. No admin secrets ever belong in the browser.
-          </p>
-        </div>
-        <div class="dashboard">
-          <aside class="dash-nav">
-            <button class="tab active" type="button" data-tab="client">Client</button>
-            <button class="tab" type="button" data-tab="admin">Admin</button>
-            <button class="tab" type="button" data-tab="billing">Billing</button>
-          </aside>
-          <div class="dash-panel active" data-panel="client">
-            <div class="panel-header">
-              <div>
-                <span class="label">Access key</span>
-                <h3>windows-client-1</h3>
-              </div>
-              <span class="badge online">Active</span>
+      <section class="mission-section" id="control">
+        <div class="mission-dashboard">
+          <div class="mission-header">
+            <div>
+              <h2>System Overview</h2>
+              <p>All systems operational</p>
             </div>
-            <div class="key-box">
-              <code id="accessKey">ss://demo-key-hidden-by-design</code>
-              <button class="copy-button" type="button" id="copyKey">Copy</button>
-            </div>
-            <div class="metric-grid">
-              <div><span>Gateway</span><strong>US East</strong></div>
-              <div><span>Port</span><strong>443</strong></div>
-              <div><span>Status</span><strong>Ready</strong></div>
-              <div><span>Mode</span><strong>Outline</strong></div>
-            </div>
+            <div class="live-pill"><span></span> Online <small>Live</small></div>
           </div>
-          <div class="dash-panel" data-panel="admin">
-            <div class="panel-header">
-              <div>
-                <span class="label">Infrastructure</span>
-                <h3>ORBIT Gateway</h3>
+          <div class="mission-grid">
+            <div class="metric-column">
+              <p class="dash-label">Network Metrics</p>
+              <article class="metric-tile"><i></i><span>Bandwidth</span><strong>847 Gbps</strong><b></b></article>
+              <article class="metric-tile"><i></i><span>Active Servers</span><strong>1,247</strong><b></b></article>
+              <article class="metric-tile"><i></i><span>Threats Blocked</span><strong>2.4M</strong><b class="blue"></b></article>
+              <article class="metric-tile"><i></i><span>Active Users</span><strong>892K</strong><b></b></article>
+              <article class="metric-tile"><i></i><span>Avg. Speed</span><strong>312 Mbps</strong><b></b></article>
+            </div>
+            <div class="orbital-status">
+              <p class="dash-label">Orbital Status</p>
+              <div class="radar-core">
+                <span></span><span></span><span></span>
               </div>
-              <span class="badge">Private API</span>
-            </div>
-            <div class="ops-list">
-              <div><span>Docker</span><strong>healthy</strong></div>
-              <div><span>UFW</span><strong>restricted admin</strong></div>
-              <div><span>fail2ban</span><strong>admin IP ignored</strong></div>
-              <div><span>Backups</span><strong>ready</strong></div>
-            </div>
-          </div>
-          <div class="dash-panel" data-panel="billing">
-            <div class="panel-header">
-              <div>
-                <span class="label">Commerce</span>
-                <h3>Payment Webhooks</h3>
+              <strong>99.99%</strong>
+              <p>Network Uptime</p>
+              <div class="radar-stats">
+                <div><b>12ms</b><span>Avg. Latency</span></div>
+                <div><b>312Mbps</b><span>Avg. Speed</span></div>
               </div>
-              <span class="badge warning">Next</span>
             </div>
-            <p>
-              Stripe or Lemon Squeezy can trigger secure access-key creation
-              after payment and revocation after cancellation.
-            </p>
+            <div class="node-column">
+              <p class="dash-label">Server Nodes</p>
+              <article class="server-node" data-load="42">
+                <header><b>ORB-US-W1</b><span>Los Angeles</span></header>
+                <div class="bar"><span></span></div>
+                <footer><span>Load</span><b>42%</b><small>12ms</small></footer>
+              </article>
+              <article class="server-node" data-load="67">
+                <header><b>ORB-EU-C1</b><span>Frankfurt</span></header>
+                <div class="bar"><span></span></div>
+                <footer><span>Load</span><b>67%</b><small>28ms</small></footer>
+              </article>
+              <article class="server-node" data-load="31">
+                <header><b>ORB-AP-E1</b><span>Tokyo</span></header>
+                <div class="bar"><span></span></div>
+                <footer><span>Load</span><b>31%</b><small>45ms</small></footer>
+              </article>
+              <article class="server-node" data-load="58">
+                <header><b>ORB-EU-W1</b><span>London</span></header>
+                <div class="bar"><span></span></div>
+                <footer><span>Load</span><b>58%</b><small>22ms</small></footer>
+              </article>
+            </div>
           </div>
         </div>
       </section>
