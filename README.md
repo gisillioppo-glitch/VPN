@@ -170,6 +170,7 @@ sudo bash verify.sh
 - `windows_client_setup.md`: Windows client workflow
 - `aws_lightsail_setup.md`: step-by-step AWS Lightsail deployment guide
 - `vpn-portal/`: static commercial portal MVP for landing, onboarding, and client dashboard design
+- `backend/`: protected API MVP for Outline access-key operations
 - `troubleshooting.md`: common fixes
 - `security_notes.md`: risk and hardening notes
 

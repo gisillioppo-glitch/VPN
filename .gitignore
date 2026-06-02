@@ -1,4 +1,6 @@
 .env
+backend/.env
+backend/node_modules/
 data/
 exports/
 backups/
