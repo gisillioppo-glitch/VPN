@@ -139,7 +139,7 @@ export function createClientsRouter({ db, outlineClient, config, emailService })
         await deleteClientKeyIfPresent(outlineClient, client);
       }
 
-      const updatedClient = await db.updateClientStatus(client.id, "revoked");
+      const updatedClient = await db.clearClientKey(client.id, "revoked");
       res.json({ client: publicClient(updatedClient) });
     } catch (error) {
       next(error);
@@ -155,7 +155,7 @@ export function createClientsRouter({ db, outlineClient, config, emailService })
         await deleteClientKeyIfPresent(outlineClient, client);
       }
 
-      const updatedClient = await db.updateClientStatus(client.id, "suspended");
+      const updatedClient = await db.clearClientKey(client.id, "suspended");
       res.json({ client: publicClient(updatedClient) });
     } catch (error) {
       next(error);
@@ -171,7 +171,7 @@ export function createClientsRouter({ db, outlineClient, config, emailService })
         await deleteClientKeyIfPresent(outlineClient, client);
       }
 
-      const updatedClient = await db.updateClientStatus(client.id, "suspended");
+      const updatedClient = await db.clearClientKey(client.id, "suspended");
       res.json({ client: publicClient(updatedClient) });
     } catch (error) {
       next(error);

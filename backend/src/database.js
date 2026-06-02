@@ -57,6 +57,7 @@ export async function openDatabase({ dbPath }) {
     getClientByEmail: (email) => getClientByEmail(db, email),
     updateClientStatus: (id, status) => updateClientStatus(db, id, status),
     updateClientKey: (id, key) => updateClientKey(db, id, key),
+    clearClientKey: (id, status) => clearClientKey(db, id, status),
   };
 }
 
@@ -194,6 +195,22 @@ async function updateClientKey(db, id, key) {
       updated_at = CURRENT_TIMESTAMP
      WHERE id = ?`,
     [key.outlineKeyId, key.outlineKeyName, key.outlineAccessUrl, id]
+  );
+
+  return getClient(db, id);
+}
+
+async function clearClientKey(db, id, status) {
+  await run(
+    db,
+    `UPDATE clients
+     SET status = ?,
+      outline_key_id = NULL,
+      outline_key_name = NULL,
+      outline_access_url = NULL,
+      updated_at = CURRENT_TIMESTAMP
+     WHERE id = ?`,
+    [status, id]
   );
 
   return getClient(db, id);
