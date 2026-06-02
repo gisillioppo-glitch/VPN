@@ -153,6 +153,22 @@ curl -X POST \
   http://127.0.0.1:8787/api/clients/CLIENT_ID/revoke
 ```
 
+Rotate a client's key:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/clients/CLIENT_ID/rotate-key
+```
+
+Cancel a client:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/clients/CLIENT_ID/cancel
+```
+
 ## Security Notes
 
 - Do not deploy this backend without HTTPS in production.

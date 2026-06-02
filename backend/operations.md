@@ -79,3 +79,25 @@ curl -X POST \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   http://127.0.0.1:8787/api/clients/CLIENT_ID/revoke
 ```
+
+Rotate a lost or exposed key:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/clients/CLIENT_ID/rotate-key
+```
+
+Cancel a client:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/clients/CLIENT_ID/cancel
+```
+
+## Status Meaning
+
+- `active`: client has a usable Outline key.
+- `revoked`: key was revoked manually, usually for security/support.
+- `cancelled`: account should not receive new keys unless reactivated manually.

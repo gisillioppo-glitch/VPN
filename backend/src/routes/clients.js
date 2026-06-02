@@ -110,5 +110,54 @@ export function createClientsRouter({ db, outlineClient, config }) {
     }
   });
 
+  router.post("/:id/cancel", async (req, res, next) => {
+    try {
+      const client = await db.getClient(Number(req.params.id));
+      if (!client) return res.status(404).json({ error: "Client not found" });
+
+      if (client.status === "active") {
+        await outlineClient.deleteAccessKey({ id: client.outlineKeyId });
+      }
+
+      const updatedClient = await db.updateClientStatus(client.id, "cancelled");
+      res.json({ client: publicClient(updatedClient) });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:id/rotate-key", async (req, res, next) => {
+    try {
+      const client = await db.getClient(Number(req.params.id));
+      if (!client) return res.status(404).json({ error: "Client not found" });
+
+      if (client.status === "cancelled") {
+        return res.status(409).json({ error: "Cancelled clients cannot be rotated" });
+      }
+
+      const keyName = `${config.defaultKeyNamePrefix}-${client.email}-${Date.now()}`;
+      const outlineKey = await outlineClient.createAccessKey({ name: keyName });
+
+      try {
+        if (client.status === "active") {
+          await outlineClient.deleteAccessKey({ id: client.outlineKeyId });
+        }
+
+        const updatedClient = await db.updateClientKey(client.id, {
+          outlineKeyId: outlineKey.id,
+          outlineKeyName: outlineKey.name,
+          outlineAccessUrl: outlineKey.accessUrl,
+        });
+
+        res.json({ client: publicClient(updatedClient, { includeAccessUrl: true }) });
+      } catch (error) {
+        await outlineClient.deleteAccessKey({ id: outlineKey.id }).catch(() => {});
+        throw error;
+      }
+    } catch (error) {
+      next(error);
+    }
+  });
+
   return router;
 }
