@@ -26,10 +26,47 @@ function publicRequest(client) {
   };
 }
 
-export function createRequestsRouter({ db, emailService }) {
-  const router = Router();
+function getRequestIp(req) {
+  const forwardedIp = req.headers["cf-connecting-ip"] || req.headers["x-forwarded-for"];
+  if (Array.isArray(forwardedIp)) return forwardedIp[0];
+  if (forwardedIp) return String(forwardedIp).split(",")[0].trim();
+  return req.ip || req.socket?.remoteAddress || "unknown";
+}
 
-  router.post("/", async (req, res, next) => {
+function createRateLimit({ windowMs, maxPerWindow }) {
+  const hits = new Map();
+
+  return (req, res, next) => {
+    const now = Date.now();
+    const key = `${getRequestIp(req)}:${normalizeEmail(req.body?.email) || "unknown"}`;
+    const record = hits.get(key) || { count: 0, resetAt: now + windowMs };
+
+    if (record.resetAt <= now) {
+      record.count = 0;
+      record.resetAt = now + windowMs;
+    }
+
+    record.count += 1;
+    hits.set(key, record);
+
+    if (record.count > maxPerWindow) {
+      return res.status(429).json({
+        error: "Too many requests. Try again later.",
+      });
+    }
+
+    return next();
+  };
+}
+
+export function createRequestsRouter({ db, emailService, config }) {
+  const router = Router();
+  const rateLimit = createRateLimit({
+    windowMs: config.publicRequestWindowMs,
+    maxPerWindow: config.publicRequestMaxPerWindow,
+  });
+
+  router.post("/", rateLimit, async (req, res, next) => {
     try {
       const name = normalizeName(req.body?.name);
       const email = normalizeEmail(req.body?.email);

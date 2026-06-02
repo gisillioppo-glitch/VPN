@@ -25,6 +25,13 @@ curl -s -X POST \
 Send the `outlineAccessUrl` privately to the customer. Do not paste access keys
 in public chats, screenshots, repos, or web pages.
 
+Shortcut:
+
+```bash
+cd /opt/outline-kit
+bash backend/orbit-admin.sh approve CLIENT_ID
+```
+
 ## Suspend Customer
 
 Use this for non-payment, cancellation, exposed keys, or support pauses.
@@ -33,6 +40,13 @@ Use this for non-payment, cancellation, exposed keys, or support pauses.
 curl -s -X POST \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   http://127.0.0.1:8787/api/clients/CLIENT_ID/suspend | jq
+```
+
+Shortcut:
+
+```bash
+cd /opt/outline-kit
+bash backend/orbit-admin.sh suspend CLIENT_ID
 ```
 
 ## Daily Checks

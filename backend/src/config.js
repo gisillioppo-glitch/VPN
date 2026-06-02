@@ -19,5 +19,7 @@ export function getConfig() {
     resendApiKey: process.env.RESEND_API_KEY || "",
     emailFrom: process.env.EMAIL_FROM || "",
     adminNotifyEmail: process.env.ADMIN_NOTIFY_EMAIL || "",
+    publicRequestWindowMs: Number(process.env.PUBLIC_REQUEST_WINDOW_MS || 60 * 60 * 1000),
+    publicRequestMaxPerWindow: Number(process.env.PUBLIC_REQUEST_MAX_PER_WINDOW || 5),
   };
 }
