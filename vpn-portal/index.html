@@ -8,6 +8,12 @@
       name="description"
       content="ORBIT is a cinematic, privacy-first VPN experience powered by self-hosted encrypted access."
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -78,22 +84,22 @@
       <section class="feature-band" id="features">
         <article class="holo-module">
           <span class="module-icon shield"></span>
-          <h2>Military-grade encryption</h2>
+          <h2>Military-grade security</h2>
           <p>Protect traffic with modern encrypted access keys and hardened server controls.</p>
         </article>
         <article class="holo-module">
           <span class="module-icon globe"></span>
-          <h2>Global-ready servers</h2>
+          <h2>Global-ready network</h2>
           <p>Start with a verified US East gateway and scale into more regions as demand grows.</p>
         </article>
         <article class="holo-module">
           <span class="module-icon bolt"></span>
-          <h2>Lightning-fast performance</h2>
+          <h2>Lightning fast</h2>
           <p>Traffic runs through a lean Outline-based stack optimized around port 443.</p>
         </article>
         <article class="holo-module">
           <span class="module-icon mask"></span>
-          <h2>No logs policy</h2>
+          <h2>No logs. Ever.</h2>
           <p>Designed for minimal operational data and clear, privacy-first customer boundaries.</p>
         </article>
       </section>
@@ -254,8 +260,24 @@
     </main>
 
     <footer class="footer">
-      <span>ORBIT VPN</span>
-      <span>Built on self-hosted Outline infrastructure</span>
+      <div>
+        <a class="footer-brand" href="#home">
+          <span class="brand-orb mini" aria-hidden="true"></span>
+          <span>ORBIT</span>
+        </a>
+        <p>Private encrypted access powered by self-hosted Outline infrastructure.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#features">Features</a>
+        <a href="#network">Network</a>
+        <a href="#pricing">Pricing</a>
+        <a href="mailto:hello@orbitvpn.co">hello@orbitvpn.co</a>
+      </div>
+      <div class="footer-note">
+        <span>US East Gateway</span>
+        <strong>35.172.31.23</strong>
+        <small>Authorized privacy use only.</small>
+      </div>
     </footer>
 
     <script src="script.js"></script>
