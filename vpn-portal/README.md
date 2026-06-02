@@ -4,6 +4,8 @@ Static MVP for a commercial Outline-based VPN portal.
 
 Open `index.html` in a browser to view it locally.
 
+See `deploy_pages.md` to publish the portal with GitHub Pages.
+
 ## Current Scope
 
 - Landing page
