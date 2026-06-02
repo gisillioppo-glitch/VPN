@@ -39,6 +39,25 @@ manager URL instead and allow that backend host through the server firewall.
 npm start
 ```
 
+## Install As A Service
+
+After `.env` is configured and dependencies are installed:
+
+```bash
+sudo bash backend/install_systemd.sh
+```
+
+The service listens on `127.0.0.1:8787` by default and should not be exposed
+directly to the public internet.
+
+Useful commands:
+
+```bash
+sudo systemctl status orbit-backend --no-pager
+sudo systemctl restart orbit-backend
+sudo journalctl -u orbit-backend -n 100 --no-pager
+```
+
 ## Local API
 
 Health:
