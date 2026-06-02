@@ -1,6 +1,6 @@
-# Northline VPN Portal MVP
+# ORBIT VPN Portal MVP
 
-Static MVP for a commercial Outline-based VPN portal.
+Static MVP for a cinematic commercial Outline-based VPN portal.
 
 Open `index.html` in a browser to view it locally.
 
@@ -8,12 +8,13 @@ See `deploy_pages.md` to publish the portal with GitHub Pages.
 
 ## Current Scope
 
-- Landing page
-- Pricing cards
-- Windows onboarding section
-- Simulated client portal
-- Simulated admin panel
-- Simulated billing integration state
+- ORBIT landing page
+- Cinematic space portal hero
+- Floating holographic feature modules
+- Network visualization
+- Mission Control dashboard
+- Futuristic access-pass pricing
+- Simulated client/admin/billing portal states
 
 The current portal does not call the real Outline API and does not expose
 secrets. It is a design and workflow MVP.
