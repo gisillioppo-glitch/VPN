@@ -106,9 +106,16 @@ configure_firewall() {
 
 configure_fail2ban() {
   log "Configuring fail2ban for sshd"
-  cat >/etc/fail2ban/jail.d/sshd-local.conf <<'EOF'
+  # shellcheck disable=SC1091
+  . ./.env
+  local ignoreip="127.0.0.1/8 ::1"
+  if [ -n "${ADMIN_CIDR:-}" ]; then
+    ignoreip="$ignoreip ${ADMIN_CIDR}"
+  fi
+  cat >/etc/fail2ban/jail.d/sshd-local.conf <<EOF
 [sshd]
 enabled = true
+ignoreip = ${ignoreip}
 mode = aggressive
 maxretry = 5
 findtime = 10m
