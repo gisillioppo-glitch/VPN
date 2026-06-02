@@ -116,7 +116,10 @@ function selectPlan(plan) {
   if (!accessForm) return;
   const planInput = accessForm.elements.plan;
   if (planInput) planInput.value = plan;
-  accessForm.scrollIntoView({ behavior: "smooth", block: "center" });
+  accessForm.classList.add("open");
+  if (window.location.hash !== "#accessForm") {
+    history.replaceState(null, "", "#accessForm");
+  }
   setTimeout(() => accessForm.elements.name?.focus(), 520);
 }
 

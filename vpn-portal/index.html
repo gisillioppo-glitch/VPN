@@ -16,7 +16,7 @@
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body class="reference-site">
     <canvas id="starfield" aria-hidden="true"></canvas>
     <div class="noise" aria-hidden="true"></div>
 
@@ -34,40 +34,36 @@
         <a href="#about">About</a>
       </nav>
       <div class="nav-actions">
-        <a class="ghost-link" href="#control">Log in</a>
-        <a class="button small" href="#pricing">Get Started</a>
-        <button class="search-button" type="button" aria-label="Search">
-          <span></span>
-        </button>
+        <a class="ghost-link" href="#accessForm">Log in</a>
+        <a class="button small" href="#accessForm">Get Started</a>
       </div>
-      <div class="nav-scanline" aria-hidden="true"><span></span></div>
     </header>
 
     <main>
-      <section class="hero" id="home">
+      <section class="ref-hero" id="home">
         <div class="hero-copy">
-          <p class="eyebrow">Secure. Private. Limitless.</p>
+          <p class="eyebrow">Private. Fast. Borderless.</p>
           <h1>Your Orbit.<br /><span>Your Freedom.</span></h1>
-          <p class="hero-subline">Private. Fast. Borderless.</p>
           <p class="hero-text">
-            Connect securely from anywhere on Earth through a private encrypted
-            tunnel built for stability, speed, and authorized privacy.
+            Secure VPN access that goes beyond boundaries and puts you in control.
           </p>
           <div class="hero-actions">
-            <a class="button" href="#pricing">Launch Orbit</a>
-            <a class="button secondary" href="#network">View Plans</a>
+            <a class="button" href="#accessForm">Launch Orbit <span aria-hidden="true">-></span></a>
+            <a class="button secondary" href="#pricing">View Plans</a>
           </div>
           <div class="trust-row">
             <div class="avatar-stack" aria-hidden="true">
               <span></span><span></span><span></span>
             </div>
-            <p>Trusted beta gateway running on hardened AWS infrastructure</p>
+            <p>Trusted by 2,500+ users worldwide</p>
           </div>
         </div>
 
         <div class="space-stage" aria-label="ORBIT portal scene">
           <div class="earth"></div>
           <div class="planet moon"></div>
+          <div class="planet small-one"></div>
+          <div class="planet small-two"></div>
           <div class="platform">
             <span></span><span></span><span></span><span></span>
           </div>
@@ -85,224 +81,228 @@
             </div>
           </div>
         </div>
-      </section>
 
-      <section class="void-section" id="features">
-        <p class="eyebrow centered">Core systems</p>
-        <h2>Engineered for the void.</h2>
-        <div class="void-grid">
-          <article class="void-card">
-            <span>01 / shield</span>
-            <h3>Encrypted by Default</h3>
-            <p>Modern encrypted access keys protect the tunnel before traffic leaves your device.</p>
-          </article>
-          <article class="void-card">
-            <span>02 / gateways</span>
-            <h3>Gateway Constellations</h3>
-            <p>Start with one verified gateway, then scale into regional relays as demand grows.</p>
-          </article>
-          <article class="void-card">
-            <span>03 / velocity</span>
-            <h3>Low Drag Routing</h3>
-            <p>A lean Outline-based stack keeps the route simple, stable, and optimized around port 443.</p>
-          </article>
-          <article class="void-card">
-            <span>04 / silence</span>
-            <h3>Quiet by Design</h3>
-            <p>No browsing logs, minimal operational records, and revocable access for every customer.</p>
-          </article>
+        <div class="scroll-cue" aria-hidden="true">
+          <span></span>
+          <small>Scroll to Explore</small>
         </div>
-      </section>
 
-      <section class="network-map-section" id="network">
-        <p class="eyebrow centered">Orbital network</p>
-        <h2>One Network.<br />Zero Borders.</h2>
-        <p class="network-lede">
-          One verified US East gateway today. A clean path to multi-region expansion tomorrow.
-        </p>
-        <div class="orbit-map" aria-label="Interactive ORBIT network map">
-          <svg class="orbit-lines" viewBox="0 0 1000 520" aria-hidden="true">
-            <line x1="500" y1="260" x2="160" y2="190" />
-            <line x1="500" y1="260" x2="235" y2="318" />
-            <line x1="500" y1="260" x2="355" y2="128" />
-            <line x1="500" y1="260" x2="450" y2="402" />
-            <line x1="500" y1="260" x2="615" y2="118" />
-            <line x1="500" y1="260" x2="705" y2="354" />
-            <line x1="500" y1="260" x2="805" y2="210" />
-            <line x1="500" y1="260" x2="860" y2="330" />
-            <line x1="500" y1="260" x2="290" y2="238" />
-            <line x1="500" y1="260" x2="640" y2="255" />
-          </svg>
-          <button class="orbit-node core" type="button" data-node="ORBIT Core">
-            <span class="orbit-logo-mark small"></span>
-          </button>
-          <button class="orbit-node n1" type="button" data-node="Los Angeles">LAX</button>
-          <button class="orbit-node n2" type="button" data-node="Costa Rica">SJO</button>
-          <button class="orbit-node n3" type="button" data-node="New York">NYC</button>
-          <button class="orbit-node n4" type="button" data-node="Sao Paulo">GRU</button>
-          <button class="orbit-node n5" type="button" data-node="Frankfurt">FRA</button>
-          <button class="orbit-node n6" type="button" data-node="Tokyo">TYO</button>
-          <button class="orbit-node n7" type="button" data-node="London">LHR</button>
-          <button class="orbit-node n8" type="button" data-node="Singapore">SIN</button>
-          <button class="orbit-node n9" type="button" data-node="Miami">MIA</button>
-          <button class="orbit-node n10" type="button" data-node="Madrid">MAD</button>
-          <div class="node-readout">
-            <span>selected relay</span>
-            <strong id="nodeReadout">ORBIT Core</strong>
-          </div>
-        </div>
-      </section>
-
-      <section class="mission-section" id="control">
-        <div class="mission-dashboard">
-          <div class="mission-header">
+        <div class="feature-dock" id="features">
+          <article>
+            <i class="dock-icon shield"></i>
             <div>
-              <h2>System Overview</h2>
-              <p>All systems operational</p>
+              <h3>Encrypted by Default</h3>
+              <p>Modern encryption protects your traffic from edge to core.</p>
             </div>
-            <div class="live-pill"><span></span> Online <small>Live</small></div>
-          </div>
-          <div class="mission-grid">
-            <div class="metric-column">
-              <p class="dash-label">Network Metrics</p>
-              <article class="metric-tile"><i></i><span>Bandwidth</span><strong>847 Gbps</strong><b></b></article>
-              <article class="metric-tile"><i></i><span>Active Servers</span><strong>1,247</strong><b></b></article>
-              <article class="metric-tile"><i></i><span>Threats Blocked</span><strong>2.4M</strong><b class="blue"></b></article>
-              <article class="metric-tile"><i></i><span>Active Users</span><strong>892K</strong><b></b></article>
-              <article class="metric-tile"><i></i><span>Avg. Speed</span><strong>312 Mbps</strong><b></b></article>
+          </article>
+          <article>
+            <i class="dock-icon orbit"></i>
+            <div>
+              <h3>Gateway Constellations</h3>
+              <p>Global infrastructure built to scale, starting in the US.</p>
             </div>
-            <div class="orbital-status">
-              <p class="dash-label">Orbital Status</p>
-              <div class="radar-core">
-                <span></span><span></span><span></span>
-              </div>
-              <strong>99.99%</strong>
-              <p>Network Uptime</p>
-              <div class="radar-stats">
-                <div><b>12ms</b><span>Avg. Latency</span></div>
-                <div><b>312Mbps</b><span>Avg. Speed</span></div>
-              </div>
+          </article>
+          <article>
+            <i class="dock-icon bolt"></i>
+            <div>
+              <h3>Low Drag Routing</h3>
+              <p>Optimized paths over port 443 for speed and stability.</p>
             </div>
-            <div class="node-column">
-              <p class="dash-label">Server Nodes</p>
-              <article class="server-node" data-load="42">
-                <header><b>ORB-US-W1</b><span>Los Angeles</span></header>
-                <div class="bar"><span></span></div>
-                <footer><span>Load</span><b>42%</b><small>12ms</small></footer>
-              </article>
-              <article class="server-node" data-load="67">
-                <header><b>ORB-EU-C1</b><span>Frankfurt</span></header>
-                <div class="bar"><span></span></div>
-                <footer><span>Load</span><b>67%</b><small>28ms</small></footer>
-              </article>
-              <article class="server-node" data-load="31">
-                <header><b>ORB-AP-E1</b><span>Tokyo</span></header>
-                <div class="bar"><span></span></div>
-                <footer><span>Load</span><b>31%</b><small>45ms</small></footer>
-              </article>
-              <article class="server-node" data-load="58">
-                <header><b>ORB-EU-W1</b><span>London</span></header>
-                <div class="bar"><span></span></div>
-                <footer><span>Load</span><b>58%</b><small>22ms</small></footer>
-              </article>
+          </article>
+          <article>
+            <i class="dock-icon ring"></i>
+            <div>
+              <h3>Quiet by Design</h3>
+              <p>No logs. Minimal data. Maximum privacy.</p>
             </div>
-          </div>
+          </article>
         </div>
       </section>
 
-      <section class="section pricing-section" id="pricing">
-        <div class="section-copy centered">
-          <p class="eyebrow">Access passes</p>
-          <h2>Choose Your Launch Window</h2>
+      <section class="network-panel" id="network">
+        <div class="network-copy">
+          <p class="eyebrow">The Orbit Network</p>
+          <h2>One Network.<br /><span>Zero Borders.</span></h2>
+          <p>
+            Orbit connects you to a global constellation of gateways. Fast.
+            Secure. Always on.
+          </p>
+          <a class="button secondary" href="#control">Explore Network <span aria-hidden="true">-></span></a>
+          <div class="network-stats">
+            <div><strong>04</strong><span>Active Gateways</span></div>
+            <div><strong>99.98%</strong><span>Network Uptime</span></div>
+            <div><strong>23ms</strong><span>Average Latency</span></div>
+          </div>
+        </div>
+        <div class="globe-map" aria-label="ORBIT network visualization">
+          <div class="globe-core">
+            <span class="orbit-logo-mark"></span>
+            <strong>ORBIT</strong>
+          </div>
+          <svg viewBox="0 0 760 470" aria-hidden="true">
+            <path d="M80 260 C210 80, 465 60, 690 180" />
+            <path d="M120 350 C290 160, 470 220, 650 330" />
+            <path d="M210 180 C300 300, 430 290, 560 140" />
+            <path d="M325 390 C380 250, 520 180, 710 270" />
+          </svg>
+          <button class="map-node los" type="button">Los Angeles<span>US West</span></button>
+          <button class="map-node ny" type="button">New York<span>US East</span></button>
+          <button class="map-node fra" type="button">Frankfurt<span>UE</span></button>
+          <button class="map-node sg" type="button">Singapore<span>SG</span></button>
+          <button class="map-node low" type="button" aria-label="Relay"></button>
+        </div>
+      </section>
+
+      <section class="control-panel" id="control">
+        <div class="control-copy">
+          <p class="eyebrow">Mission Control</p>
+          <h2>You're in Control.</h2>
+          <p>Real-time insights and total visibility over your connection.</p>
+          <ul>
+            <li>Live network status</li>
+            <li>Server performance</li>
+            <li>Connection analytics</li>
+            <li>Threat protection</li>
+          </ul>
+        </div>
+        <div class="dashboard-card">
+          <div class="dash-column">
+            <h3>System Overview</h3>
+            <p>All systems operational</p>
+            <article><span>Network Status</span><strong>+99%</strong></article>
+            <article><span>Active Gateways</span><strong>04</strong></article>
+            <article><span>Connected Devices</span><strong>1,247</strong></article>
+            <article><span>Data Encrypted</span><strong>2.4 TB</strong></article>
+            <article><span>Uptime</span><strong>99.98%</strong></article>
+          </div>
+          <div class="connection-status">
+            <h3>Connection Status</h3>
+            <div class="radar-core"><span></span><span></span><span></span></div>
+            <p>Connected to<br /><strong>Los Angeles, US</strong></p>
+            <div class="radar-stats">
+              <div><b>23 ms</b><span>Latency</span></div>
+              <div><b>312 Mbps</b><span>Speed</span></div>
+            </div>
+          </div>
+          <div class="activity-card">
+            <div class="activity-head">
+              <h3>Recent Activity</h3>
+              <span>View all</span>
+            </div>
+            <article><b>Data Shield</b><span>78 files</span><small>2m ago</small></article>
+            <article><b>Server Switch</b><span>Los Angeles, US</span><small>8m ago</small></article>
+            <article><b>Threat Blocked</b><span>Malicious attempt</span><small>18m ago</small></article>
+            <article><b>Data Encrypted</b><span>4.6 GB</span><small>19m ago</small></article>
+            <article><b>Connection Established</b><span>Successful</span><small>21m ago</small></article>
+          </div>
+          <div class="live-pill"><span></span> Live</div>
+        </div>
+      </section>
+
+      <section class="pricing-panel" id="pricing">
+        <div class="pricing-copy">
+          <p class="eyebrow">Access Passes</p>
+          <h2>Choose your<br />Orbit pass.</h2>
+          <p>Simple plans. No complexity. Cancel anytime.</p>
         </div>
         <div class="passes">
           <article class="pass">
-            <span class="pass-label">Solo</span>
-            <h3>Starter Orbit</h3>
-            <strong class="price">$5<span>/mo</span></strong>
-            <p>One device, one private access key, guided setup.</p>
+            <span class="pass-label">Explorer</span>
+            <h3>Explorer</h3>
+            <strong class="price">$4<span>.99 /MO</span></strong>
+            <p>1 Device<br />US Gateway<br />Standard Speed</p>
             <button class="button" type="button" data-plan="starter">Request Access</button>
           </article>
-          <article class="pass featured-pass">
-            <span class="pass-label">Popular</span>
-            <h3>Orbit Plus</h3>
-            <strong class="price">$9<span>/mo</span></strong>
-            <p>Two devices, priority key reset, optimized onboarding.</p>
+          <article class="pass">
+            <span class="pass-label">Voyager</span>
+            <h3>Voyager</h3>
+            <strong class="price">$8<span>.99 /MO</span></strong>
+            <p>3 Devices<br />Priority Routing<br />Faster Speeds</p>
             <button class="button" type="button" data-plan="plus">Request Access</button>
           </article>
-          <article class="pass">
-            <span class="pass-label">Crew</span>
-            <h3>Family Orbit</h3>
-            <strong class="price">$15<span>/mo</span></strong>
-            <p>Four trusted devices with monthly access review.</p>
+          <article class="pass featured-pass">
+            <span class="pass-label">Most Popular</span>
+            <h3>Pioneer</h3>
+            <strong class="price">$12<span>.99 /MO</span></strong>
+            <p>Unlimited Devices<br />All Gateways<br />Maximum Speed</p>
             <button class="button" type="button" data-plan="family">Request Access</button>
           </article>
-        </div>
-        <form class="access-form" id="accessForm">
-          <div>
-            <p class="eyebrow">Private beta</p>
-            <h3>Request ORBIT access</h3>
-            <p>Send your request. We review payment manually, then email your private Outline access key after approval.</p>
-          </div>
-          <label>
-            Name
-            <input name="name" type="text" autocomplete="name" required />
-          </label>
-          <label>
-            Email
-            <input name="email" type="email" autocomplete="email" required />
-          </label>
-          <label>
-            Plan
-            <select name="plan" required>
-              <option value="starter">Starter Orbit</option>
-              <option value="plus">Orbit Plus</option>
-              <option value="family">Family Orbit</option>
-            </select>
-          </label>
-          <button class="button" type="submit">Send Request</button>
-          <p class="form-status" id="formStatus" role="status"></p>
-        </form>
-      </section>
-
-      <section class="final-cta" id="about">
-        <div class="cta-portal" aria-hidden="true">
-          <span></span><span></span><span></span>
-        </div>
-        <div class="cta-copy">
-          <p class="eyebrow">Step through</p>
-          <h2>Launch Your Private Tunnel.</h2>
-          <p>
-            ORBIT turns a hardened self-hosted gateway into a premium customer
-            experience. Next stop: backend, payments, and automated key delivery.
-          </p>
-          <a class="button" href="#pricing">Launch Orbit</a>
         </div>
       </section>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" id="about">
       <div>
         <a class="footer-brand" href="#home">
           <span class="brand-orb mini" aria-hidden="true"></span>
           <span>ORBIT</span>
+          <small>VPN</small>
         </a>
-        <p>Private encrypted access powered by self-hosted Outline infrastructure.</p>
+        <p>Orbit is a next-generation VPN built for privacy, speed, and a world without borders.</p>
+        <div class="socials" aria-label="Social links">
+          <a href="mailto:hello@orbitvpn.co">Mail</a>
+          <a href="#home">X</a>
+          <a href="#home">Discord</a>
+        </div>
       </div>
       <div class="footer-links">
+        <h3>Product</h3>
         <a href="#features">Features</a>
         <a href="#network">Network</a>
+        <a href="#control">Control Center</a>
         <a href="#pricing">Pricing</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="terms.html">Terms</a>
-        <a href="mailto:hello@orbitvpn.co">hello@orbitvpn.co</a>
+        <a href="#home">Updates</a>
+      </div>
+      <div class="footer-links">
+        <h3>Company</h3>
+        <a href="#about">About Orbit</a>
+        <a href="#home">Blog</a>
+        <a href="#home">Careers</a>
+        <a href="#home">Press</a>
+        <a href="mailto:hello@orbitvpn.co">Contact</a>
+      </div>
+      <div class="footer-links">
+        <h3>Support</h3>
+        <a href="mailto:hello@orbitvpn.co">Help Center</a>
+        <a href="#home">Guides</a>
+        <a href="#control">Status</a>
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
       </div>
       <div class="footer-note">
-        <span>US East Gateway</span>
-        <strong>35.172.31.23</strong>
-        <small>Authorized privacy use only.</small>
+        <span>Gateway Location</span>
+        <strong>US East (Primary)</strong>
+        <small>More regions coming soon.</small>
+        <span>Contact</span>
+        <strong>hello@orbitvpn.co</strong>
       </div>
     </footer>
+
+    <form class="access-form access-modal" id="accessForm">
+      <div>
+        <p class="eyebrow">Private beta</p>
+        <h3>Request ORBIT access</h3>
+        <p>Send your request. We review payment manually, then email your private Outline access key after approval.</p>
+      </div>
+      <label>
+        Name
+        <input name="name" type="text" autocomplete="name" required />
+      </label>
+      <label>
+        Email
+        <input name="email" type="email" autocomplete="email" required />
+      </label>
+      <label>
+        Plan
+        <select name="plan" required>
+          <option value="starter">Explorer</option>
+          <option value="plus">Voyager</option>
+          <option value="family">Pioneer</option>
+        </select>
+      </label>
+      <button class="button" type="submit">Send Request</button>
+      <p class="form-status" id="formStatus" role="status"></p>
+    </form>
 
     <script src="config.js"></script>
     <script src="script.js"></script>
