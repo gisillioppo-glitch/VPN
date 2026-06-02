@@ -18,6 +18,7 @@ Edit `.env`:
 
 ```text
 ADMIN_TOKEN=long-random-admin-token
+DB_PATH=./data/orbit.db
 OUTLINE_API_URL=https://[::1]:8443/YOUR_SECRET_API_PREFIX
 OUTLINE_CERT_SHA256=...
 ```
@@ -106,6 +107,40 @@ Revoke access key:
 curl -X DELETE \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
   http://127.0.0.1:8787/api/keys/ACCESS_KEY_ID
+```
+
+## Client Records
+
+Create a client and automatically create an Outline key:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Demo Customer","email":"demo@example.com","plan":"starter"}' \
+  http://127.0.0.1:8787/api/clients
+```
+
+List clients:
+
+```bash
+curl -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/clients
+```
+
+Get a client, including their access URL:
+
+```bash
+curl -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/clients/CLIENT_ID
+```
+
+Revoke a client and their Outline key:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/clients/CLIENT_ID/revoke
 ```
 
 ## Security Notes

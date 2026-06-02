@@ -9,6 +9,7 @@ export function getConfig() {
   return {
     port: Number(process.env.PORT || 8787),
     adminToken: process.env.ADMIN_TOKEN,
+    dbPath: process.env.DB_PATH || "./data/orbit.db",
     outlineApiUrl: process.env.OUTLINE_API_URL.replace(/\/+$/, ""),
     outlineCertSha256: process.env.OUTLINE_CERT_SHA256 || "",
     defaultKeyNamePrefix: process.env.DEFAULT_KEY_NAME_PREFIX || "orbit-client",
