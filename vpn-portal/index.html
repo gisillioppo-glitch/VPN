@@ -221,23 +221,48 @@
             <h3>Starter Orbit</h3>
             <strong class="price">$5<span>/mo</span></strong>
             <p>One device, one private access key, guided setup.</p>
-            <button class="button" type="button" data-plan="Starter">Request Access</button>
+            <button class="button" type="button" data-plan="starter">Request Access</button>
           </article>
           <article class="pass featured-pass">
             <span class="pass-label">Popular</span>
             <h3>Orbit Plus</h3>
             <strong class="price">$9<span>/mo</span></strong>
             <p>Two devices, priority key reset, optimized onboarding.</p>
-            <button class="button" type="button" data-plan="Plus">Request Access</button>
+            <button class="button" type="button" data-plan="plus">Request Access</button>
           </article>
           <article class="pass">
             <span class="pass-label">Crew</span>
             <h3>Family Orbit</h3>
             <strong class="price">$15<span>/mo</span></strong>
             <p>Four trusted devices with monthly access review.</p>
-            <button class="button" type="button" data-plan="Family">Request Access</button>
+            <button class="button" type="button" data-plan="family">Request Access</button>
           </article>
         </div>
+        <form class="access-form" id="accessForm">
+          <div>
+            <p class="eyebrow">Private beta</p>
+            <h3>Request ORBIT access</h3>
+            <p>Send your request. We review payment manually, then email your private Outline access key after approval.</p>
+          </div>
+          <label>
+            Name
+            <input name="name" type="text" autocomplete="name" required />
+          </label>
+          <label>
+            Email
+            <input name="email" type="email" autocomplete="email" required />
+          </label>
+          <label>
+            Plan
+            <select name="plan" required>
+              <option value="starter">Starter Orbit</option>
+              <option value="plus">Orbit Plus</option>
+              <option value="family">Family Orbit</option>
+            </select>
+          </label>
+          <button class="button" type="submit">Send Request</button>
+          <p class="form-status" id="formStatus" role="status"></p>
+        </form>
       </section>
 
       <section class="final-cta" id="about">
@@ -277,6 +302,11 @@
       </div>
     </footer>
 
+    <script>
+      window.ORBIT_CONFIG = {
+        apiBaseUrl: "",
+      };
+    </script>
     <script src="script.js"></script>
   </body>
 </html>

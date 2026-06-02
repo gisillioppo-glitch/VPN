@@ -2205,6 +2205,78 @@ h3 {
   font-size: 12px;
 }
 
+.access-form {
+  display: grid;
+  max-width: 760px;
+  margin: 42px auto 0;
+  padding: 28px;
+  border: 1px solid rgba(93, 207, 255, 0.18);
+  border-radius: 20px;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(30, 144, 255, 0.18), transparent 34%),
+    rgba(3, 10, 22, 0.72);
+  box-shadow: 0 24px 100px rgba(0, 0, 0, 0.24);
+  gap: 18px;
+}
+
+.access-form h3 {
+  margin: 0 0 8px;
+  color: #fff;
+  font-size: clamp(24px, 3vw, 34px);
+}
+
+.access-form p {
+  margin: 0;
+  color: rgba(210, 228, 248, 0.68);
+  line-height: 1.7;
+}
+
+.access-form label {
+  display: grid;
+  gap: 8px;
+  color: rgba(230, 241, 255, 0.8);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.access-form input,
+.access-form select {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 14px;
+  border: 1px solid rgba(93, 207, 255, 0.22);
+  border-radius: 12px;
+  background: rgba(1, 6, 16, 0.78);
+  color: #fff;
+  font: inherit;
+  outline: none;
+}
+
+.access-form input:focus,
+.access-form select:focus {
+  border-color: rgba(90, 240, 255, 0.72);
+  box-shadow: 0 0 0 4px rgba(30, 144, 255, 0.14);
+}
+
+.access-form .button {
+  width: fit-content;
+}
+
+.form-status {
+  min-height: 24px;
+  color: rgba(210, 228, 248, 0.72);
+  font-size: 14px;
+}
+
+.form-status.success {
+  color: #5af0ff;
+}
+
+.form-status.error {
+  color: #ff8c8c;
+}
+
 @keyframes lineFlow {
   to { stroke-dashoffset: -56; }
 }
@@ -2243,6 +2315,14 @@ h3 {
 
   .void-grid {
     grid-template-columns: 1fr;
+  }
+
+  .access-form {
+    padding: 22px;
+  }
+
+  .access-form .button {
+    width: 100%;
   }
 
   .orbit-map {

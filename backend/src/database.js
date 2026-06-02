@@ -54,6 +54,7 @@ export async function openDatabase({ dbPath }) {
     createClient: (client) => createClient(db, client),
     listClients: () => listClients(db),
     getClient: (id) => getClient(db, id),
+    getClientByEmail: (email) => getClientByEmail(db, email),
     updateClientStatus: (id, status) => updateClientStatus(db, id, status),
     updateClientKey: (id, key) => updateClientKey(db, id, key),
   };
@@ -67,14 +68,48 @@ async function migrate(db) {
       name TEXT NOT NULL,
       email TEXT NOT NULL UNIQUE,
       plan TEXT NOT NULL,
-      status TEXT NOT NULL DEFAULT 'active',
-      outline_key_id TEXT NOT NULL,
-      outline_key_name TEXT NOT NULL,
-      outline_access_url TEXT NOT NULL,
+      status TEXT NOT NULL DEFAULT 'pending',
+      outline_key_id TEXT,
+      outline_key_name TEXT,
+      outline_access_url TEXT,
       created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
       updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     )`
   );
+
+  const columns = await all(db, "PRAGMA table_info(clients)");
+  const keyColumn = columns.find((column) => column.name === "outline_key_id");
+
+  if (keyColumn?.notnull) {
+    await run(db, "ALTER TABLE clients RENAME TO clients_legacy_notnull");
+    await run(
+      db,
+      `CREATE TABLE clients (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        email TEXT NOT NULL UNIQUE,
+        plan TEXT NOT NULL,
+        status TEXT NOT NULL DEFAULT 'pending',
+        outline_key_id TEXT,
+        outline_key_name TEXT,
+        outline_access_url TEXT,
+        created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+      )`
+    );
+    await run(
+      db,
+      `INSERT INTO clients (
+        id, name, email, plan, status, outline_key_id, outline_key_name,
+        outline_access_url, created_at, updated_at
+      )
+      SELECT id, name, email, plan,
+        CASE status WHEN 'active' THEN 'approved' WHEN 'cancelled' THEN 'suspended' ELSE status END,
+        outline_key_id, outline_key_name, outline_access_url, created_at, updated_at
+      FROM clients_legacy_notnull`
+    );
+    await run(db, "DROP TABLE clients_legacy_notnull");
+  }
 
   await run(
     db,
@@ -112,6 +147,18 @@ function listClients(db) {
   );
 }
 
+function getClientByEmail(db, email) {
+  return get(
+    db,
+    `SELECT id, name, email, plan, status, outline_key_id AS outlineKeyId,
+      outline_key_name AS outlineKeyName, outline_access_url AS outlineAccessUrl,
+      created_at AS createdAt, updated_at AS updatedAt
+     FROM clients
+     WHERE email = ?`,
+    [email]
+  );
+}
+
 function getClient(db, id) {
   return get(
     db,
@@ -140,7 +187,7 @@ async function updateClientKey(db, id, key) {
   await run(
     db,
     `UPDATE clients
-     SET status = 'active',
+     SET status = 'approved',
       outline_key_id = ?,
       outline_key_name = ?,
       outline_access_url = ?,

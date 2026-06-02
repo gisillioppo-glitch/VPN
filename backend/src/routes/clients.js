@@ -1,6 +1,7 @@
 import { Router } from "express";
 
-const validPlans = new Set(["starter", "plus", "family"]);
+const validPlans = new Set(["starter", "plus", "family", "launch"]);
+const activeStatuses = new Set(["active", "approved"]);
 
 function normalizeEmail(email) {
   return String(email || "").trim().toLowerCase();
@@ -32,7 +33,12 @@ function publicClient(client, { includeAccessUrl = false } = {}) {
   };
 }
 
-export function createClientsRouter({ db, outlineClient, config }) {
+async function deleteClientKeyIfPresent(outlineClient, client) {
+  if (!client.outlineKeyId) return;
+  await outlineClient.deleteAccessKey({ id: client.outlineKeyId }).catch(() => {});
+}
+
+export function createClientsRouter({ db, outlineClient, config, emailService }) {
   const router = Router();
 
   router.get("/", async (_req, res, next) => {
@@ -48,7 +54,7 @@ export function createClientsRouter({ db, outlineClient, config }) {
     try {
       const client = await db.getClient(Number(req.params.id));
       if (!client) return res.status(404).json({ error: "Client not found" });
-      res.json({ client: publicClient(client, { includeAccessUrl: true }) });
+        res.json({ client: publicClient(client, { includeAccessUrl: true }) });
     } catch (error) {
       next(error);
     }
@@ -67,28 +73,58 @@ export function createClientsRouter({ db, outlineClient, config }) {
         });
       }
 
-      const keyName = `${config.defaultKeyNamePrefix}-${email}`;
+      const client = await db.createClient({
+        name,
+        email,
+        plan,
+        status: "pending",
+        outlineKeyId: null,
+        outlineKeyName: null,
+        outlineAccessUrl: null,
+      });
+
+      res.status(201).json({
+        client: publicClient(client),
+      });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:id/approve", async (req, res, next) => {
+    try {
+      const client = await db.getClient(Number(req.params.id));
+      if (!client) return res.status(404).json({ error: "Client not found" });
+      if (client.status === "revoked") {
+        return res.status(409).json({ error: "Revoked clients cannot be approved" });
+      }
+      if (activeStatuses.has(client.status) && client.outlineKeyId) {
+        return res.json({ client: publicClient(client, { includeAccessUrl: true }) });
+      }
+
+      const keyName = `${config.defaultKeyNamePrefix}-${client.email}-${Date.now()}`;
       const outlineKey = await outlineClient.createAccessKey({ name: keyName });
-      let client;
 
       try {
-        client = await db.createClient({
-          name,
-          email,
-          plan,
-          status: "active",
+        const updatedClient = await db.updateClientKey(client.id, {
           outlineKeyId: outlineKey.id,
           outlineKeyName: outlineKey.name,
           outlineAccessUrl: outlineKey.accessUrl,
+        });
+
+        const emailResult = await emailService.sendAccessApproved(updatedClient).catch((error) => ({
+          sent: false,
+          error: error.message,
+        }));
+
+        res.json({
+          client: publicClient(updatedClient, { includeAccessUrl: true }),
+          email: emailResult,
         });
       } catch (error) {
         await outlineClient.deleteAccessKey({ id: outlineKey.id }).catch(() => {});
         throw error;
       }
-
-      res.status(201).json({
-        client: publicClient(client, { includeAccessUrl: true }),
-      });
     } catch (error) {
       next(error);
     }
@@ -99,11 +135,27 @@ export function createClientsRouter({ db, outlineClient, config }) {
       const client = await db.getClient(Number(req.params.id));
       if (!client) return res.status(404).json({ error: "Client not found" });
 
-      if (client.status !== "revoked") {
-        await outlineClient.deleteAccessKey({ id: client.outlineKeyId });
+      if (client.status !== "revoked" && client.outlineKeyId) {
+        await deleteClientKeyIfPresent(outlineClient, client);
       }
 
       const updatedClient = await db.updateClientStatus(client.id, "revoked");
+      res.json({ client: publicClient(updatedClient) });
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  router.post("/:id/suspend", async (req, res, next) => {
+    try {
+      const client = await db.getClient(Number(req.params.id));
+      if (!client) return res.status(404).json({ error: "Client not found" });
+
+      if (activeStatuses.has(client.status) && client.outlineKeyId) {
+        await deleteClientKeyIfPresent(outlineClient, client);
+      }
+
+      const updatedClient = await db.updateClientStatus(client.id, "suspended");
       res.json({ client: publicClient(updatedClient) });
     } catch (error) {
       next(error);
@@ -115,11 +167,11 @@ export function createClientsRouter({ db, outlineClient, config }) {
       const client = await db.getClient(Number(req.params.id));
       if (!client) return res.status(404).json({ error: "Client not found" });
 
-      if (client.status === "active") {
-        await outlineClient.deleteAccessKey({ id: client.outlineKeyId });
+      if (activeStatuses.has(client.status) && client.outlineKeyId) {
+        await deleteClientKeyIfPresent(outlineClient, client);
       }
 
-      const updatedClient = await db.updateClientStatus(client.id, "cancelled");
+      const updatedClient = await db.updateClientStatus(client.id, "suspended");
       res.json({ client: publicClient(updatedClient) });
     } catch (error) {
       next(error);
@@ -131,16 +183,16 @@ export function createClientsRouter({ db, outlineClient, config }) {
       const client = await db.getClient(Number(req.params.id));
       if (!client) return res.status(404).json({ error: "Client not found" });
 
-      if (client.status === "cancelled") {
-        return res.status(409).json({ error: "Cancelled clients cannot be rotated" });
+      if (client.status === "revoked" || client.status === "suspended") {
+        return res.status(409).json({ error: "Suspended or revoked clients cannot be rotated" });
       }
 
       const keyName = `${config.defaultKeyNamePrefix}-${client.email}-${Date.now()}`;
       const outlineKey = await outlineClient.createAccessKey({ name: keyName });
 
       try {
-        if (client.status === "active") {
-          await outlineClient.deleteAccessKey({ id: client.outlineKeyId });
+        if (activeStatuses.has(client.status) && client.outlineKeyId) {
+          await deleteClientKeyIfPresent(outlineClient, client);
         }
 
         const updatedClient = await db.updateClientKey(client.id, {

@@ -62,14 +62,30 @@ found 0 vulnerabilities
 
 ## Customer Flow
 
-Create client and Outline key:
+Public beta request. This creates a `pending` record and sends request-received
+email if email is configured:
+
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Demo Customer","email":"demo@example.com","plan":"starter"}' \
+  http://127.0.0.1:8787/api/requests
+```
+
+List pending clients:
+
+```bash
+curl -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/clients | jq '.clients[] | select(.status=="pending")'
+```
+
+Approve after payment review. This creates the Outline key and emails it if
+email is configured:
 
 ```bash
 curl -X POST \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
-  -H "Content-Type: application/json" \
-  -d '{"name":"Demo Customer","email":"demo@example.com","plan":"starter"}' \
-  http://127.0.0.1:8787/api/clients
+  http://127.0.0.1:8787/api/clients/CLIENT_ID/approve
 ```
 
 Revoke client and Outline key:
@@ -88,16 +104,17 @@ curl -X POST \
   http://127.0.0.1:8787/api/clients/CLIENT_ID/rotate-key
 ```
 
-Cancel a client:
+Suspend a client:
 
 ```bash
 curl -X POST \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
-  http://127.0.0.1:8787/api/clients/CLIENT_ID/cancel
+  http://127.0.0.1:8787/api/clients/CLIENT_ID/suspend
 ```
 
 ## Status Meaning
 
-- `active`: client has a usable Outline key.
-- `revoked`: key was revoked manually, usually for security/support.
-- `cancelled`: account should not receive new keys unless reactivated manually.
+- `pending`: request received, no key generated yet.
+- `approved`: payment/review passed, client has a usable Outline key.
+- `suspended`: access paused; approving again creates a fresh key.
+- `revoked`: account/key closed permanently for this beta cycle.

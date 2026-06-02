@@ -13,5 +13,11 @@ export function getConfig() {
     outlineApiUrl: process.env.OUTLINE_API_URL.replace(/\/+$/, ""),
     outlineCertSha256: process.env.OUTLINE_CERT_SHA256 || "",
     defaultKeyNamePrefix: process.env.DEFAULT_KEY_NAME_PREFIX || "orbit-client",
+    publicPortalOrigin: process.env.PUBLIC_PORTAL_ORIGIN || "",
+    brandName: process.env.BRAND_NAME || "ORBIT VPN",
+    supportEmail: process.env.SUPPORT_EMAIL || "hello@orbitvpn.co",
+    resendApiKey: process.env.RESEND_API_KEY || "",
+    emailFrom: process.env.EMAIL_FROM || "",
+    adminNotifyEmail: process.env.ADMIN_NOTIFY_EMAIL || "",
   };
 }

@@ -1,7 +1,7 @@
 # ORBIT Outline Backend MVP
 
-Small protected API for creating, listing, renaming, and revoking Outline access
-keys.
+Small protected API for private beta requests, approval-based Outline access key
+creation, and customer lifecycle operations.
 
 This backend must run on a trusted server. Do not expose Outline Manager secrets
 to the frontend.
@@ -31,6 +31,11 @@ ADMIN_TOKEN=long-random-admin-token
 DB_PATH=./data/orbit.db
 OUTLINE_API_URL=https://[::1]:8443/YOUR_SECRET_API_PREFIX
 OUTLINE_CERT_SHA256=...
+PUBLIC_PORTAL_ORIGIN=https://gisillioppo-glitch.github.io
+SUPPORT_EMAIL=hello@orbitvpn.co
+RESEND_API_KEY=
+EMAIL_FROM=
+ADMIN_NOTIFY_EMAIL=
 ```
 
 The API URL and cert hash come from:
@@ -121,7 +126,16 @@ curl -X DELETE \
 
 ## Client Records
 
-Create a client and automatically create an Outline key:
+Create a public beta request. This does not create an Outline key:
+
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Demo Customer","email":"demo@example.com","plan":"starter"}' \
+  http://127.0.0.1:8787/api/requests
+```
+
+Create a pending client record from the admin API:
 
 ```bash
 curl -X POST \
@@ -145,6 +159,15 @@ curl -H "Authorization: Bearer $ADMIN_TOKEN" \
   http://127.0.0.1:8787/api/clients/CLIENT_ID
 ```
 
+Approve a pending client. This creates the Outline key and emails it if email is
+configured:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/clients/CLIENT_ID/approve
+```
+
 Revoke a client and their Outline key:
 
 ```bash
@@ -161,13 +184,15 @@ curl -X POST \
   http://127.0.0.1:8787/api/clients/CLIENT_ID/rotate-key
 ```
 
-Cancel a client:
+Suspend a client:
 
 ```bash
 curl -X POST \
   -H "Authorization: Bearer $ADMIN_TOKEN" \
-  http://127.0.0.1:8787/api/clients/CLIENT_ID/cancel
+  http://127.0.0.1:8787/api/clients/CLIENT_ID/suspend
 ```
+
+`/cancel` is kept as a compatibility alias for `/suspend`.
 
 ## Security Notes
 

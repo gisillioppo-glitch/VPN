@@ -9,6 +9,8 @@ const accessKey = document.querySelector("#accessKey");
 const orbitNodes = document.querySelectorAll(".orbit-node");
 const nodeReadout = document.querySelector(".node-readout");
 const serverNodes = document.querySelectorAll(".server-node");
+const accessForm = document.querySelector("#accessForm");
+const formStatus = document.querySelector("#formStatus");
 
 let stars = [];
 let pointerX = 0;
@@ -104,17 +106,69 @@ tabs.forEach((tab) => {
   });
 });
 
+function setFormStatus(message, type = "") {
+  if (!formStatus) return;
+  formStatus.textContent = message;
+  formStatus.className = `form-status ${type}`.trim();
+}
+
+function selectPlan(plan) {
+  if (!accessForm) return;
+  const planInput = accessForm.elements.plan;
+  if (planInput) planInput.value = plan;
+  accessForm.scrollIntoView({ behavior: "smooth", block: "center" });
+  setTimeout(() => accessForm.elements.name?.focus(), 520);
+}
+
 document.querySelectorAll("[data-plan]").forEach((button) => {
   button.addEventListener("click", () => {
-    const plan = button.dataset.plan;
-    button.textContent = `${plan} access requested`;
-    button.disabled = true;
-    setTimeout(() => {
-      button.textContent = "Request Access";
-      button.disabled = false;
-    }, 1700);
+    selectPlan(button.dataset.plan || "starter");
   });
 });
+
+if (accessForm) {
+  accessForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const apiBaseUrl = window.ORBIT_CONFIG?.apiBaseUrl?.replace(/\/+$/, "");
+    const payload = {
+      name: accessForm.elements.name.value.trim(),
+      email: accessForm.elements.email.value.trim(),
+      plan: accessForm.elements.plan.value,
+    };
+
+    if (!apiBaseUrl) {
+      setFormStatus(
+        "Beta requests are being approved manually right now. Message us with your name, email, and plan.",
+        "error"
+      );
+      return;
+    }
+
+    setFormStatus("Sending request...");
+    const submitButton = accessForm.querySelector('button[type="submit"]');
+    submitButton.disabled = true;
+
+    try {
+      const response = await fetch(`${apiBaseUrl}/api/requests`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const body = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        throw new Error(body.error || "Request failed");
+      }
+
+      accessForm.reset();
+      setFormStatus("Request received. Check your email for confirmation after review.", "success");
+    } catch (error) {
+      setFormStatus(error.message || "Could not send request. Try again soon.", "error");
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+}
 
 if (copyButton && accessKey) {
   copyButton.addEventListener("click", async () => {

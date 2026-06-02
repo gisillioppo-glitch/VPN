@@ -2,19 +2,32 @@ import express from "express";
 import helmet from "helmet";
 import { getConfig } from "./config.js";
 import { openDatabase } from "./database.js";
+import { createEmailService } from "./emailService.js";
 import { requireAdminToken } from "./middleware/auth.js";
 import { OutlineClient } from "./outlineClient.js";
 import { createClientsRouter } from "./routes/clients.js";
 import { createHealthRouter } from "./routes/health.js";
 import { createKeysRouter } from "./routes/keys.js";
+import { createRequestsRouter } from "./routes/requests.js";
 
 const config = getConfig();
 const outlineClient = new OutlineClient({ apiUrl: config.outlineApiUrl });
 const db = await openDatabase({ dbPath: config.dbPath });
+const emailService = createEmailService(config);
 const authMiddleware = requireAdminToken(config);
 const app = express();
 
 app.use(helmet());
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+  if (config.publicPortalOrigin && origin === config.publicPortalOrigin) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS");
+  }
+  if (req.method === "OPTIONS") return res.sendStatus(204);
+  return next();
+});
 app.use(express.json({ limit: "32kb" }));
 
 app.get("/", (_req, res) => {
@@ -26,8 +39,13 @@ app.get("/", (_req, res) => {
 });
 
 app.use("/health", createHealthRouter({ outlineClient, authMiddleware }));
+app.use("/api/requests", createRequestsRouter({ db, emailService }));
 app.use("/api/keys", authMiddleware, createKeysRouter({ outlineClient, config }));
-app.use("/api/clients", authMiddleware, createClientsRouter({ db, outlineClient, config }));
+app.use(
+  "/api/clients",
+  authMiddleware,
+  createClientsRouter({ db, outlineClient, config, emailService })
+);
 
 app.use((error, _req, res, _next) => {
   const message = error instanceof Error ? error.message : "Unknown error";
