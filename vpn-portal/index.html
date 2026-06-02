@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Northline VPN Portal</title>
+    <meta
+      name="description"
+      content="A privacy-first self-hosted VPN access portal powered by Outline."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="Northline home">
+        <span class="brand-mark">N</span>
+        <span>Northline</span>
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#plans">Plans</a>
+        <a href="#setup">Setup</a>
+        <a href="#portal">Portal</a>
+        <a href="#security">Security</a>
+      </nav>
+      <a class="nav-action" href="#portal">Client Access</a>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-copy">
+          <p class="eyebrow">Self-hosted encrypted access</p>
+          <h1>Northline VPN</h1>
+          <p class="hero-text">
+            Private Outline-based access for authorized networks, built around
+            stability, simple onboarding, and transparent operations.
+          </p>
+          <div class="hero-actions">
+            <a class="button primary" href="#plans">View Plans</a>
+            <a class="button secondary" href="#setup">Connect Guide</a>
+          </div>
+        </div>
+        <aside class="hero-panel" aria-label="Service status preview">
+          <div class="status-header">
+            <span class="status-dot"></span>
+            <span>US East Gateway</span>
+            <strong>Online</strong>
+          </div>
+          <div class="signal-card">
+            <div>
+              <span class="label">Exit IP</span>
+              <strong>35.172.31.23</strong>
+            </div>
+            <div>
+              <span class="label">Transport</span>
+              <strong>443 TCP/UDP</strong>
+            </div>
+          </div>
+          <div class="connection-map" aria-hidden="true">
+            <span class="node client"></span>
+            <span class="path"></span>
+            <span class="node server"></span>
+            <span class="path short"></span>
+            <span class="node web"></span>
+          </div>
+          <div class="metric-grid">
+            <div><span>Uptime</span><strong>29h</strong></div>
+            <div><span>Health</span><strong>Ready</strong></div>
+            <div><span>Mode</span><strong>Outline</strong></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="section" id="plans">
+        <div class="section-heading">
+          <p class="eyebrow">Launch offers</p>
+          <h2>Simple Personal Access</h2>
+        </div>
+        <div class="plans">
+          <article class="plan">
+            <div class="plan-top">
+              <h3>Starter</h3>
+              <p>For one Windows laptop.</p>
+            </div>
+            <div class="price">$5<span>/mo</span></div>
+            <ul>
+              <li>One access key</li>
+              <li>US East gateway</li>
+              <li>Manual support</li>
+            </ul>
+            <button class="button primary" type="button" data-plan="Starter">
+              Request Access
+            </button>
+          </article>
+          <article class="plan featured">
+            <div class="plan-top">
+              <h3>Plus</h3>
+              <p>For daily browsing and schoolwork where VPN use is allowed.</p>
+            </div>
+            <div class="price">$9<span>/mo</span></div>
+            <ul>
+              <li>Two access keys</li>
+              <li>Priority key reset</li>
+              <li>Setup assistance</li>
+            </ul>
+            <button class="button primary" type="button" data-plan="Plus">
+              Request Access
+            </button>
+          </article>
+          <article class="plan">
+            <div class="plan-top">
+              <h3>Family</h3>
+              <p>For a small trusted household.</p>
+            </div>
+            <div class="price">$15<span>/mo</span></div>
+            <ul>
+              <li>Four access keys</li>
+              <li>Shared support channel</li>
+              <li>Monthly key audit</li>
+            </ul>
+            <button class="button primary" type="button" data-plan="Family">
+              Request Access
+            </button>
+          </article>
+        </div>
+      </section>
+
+      <section class="section split" id="setup">
+        <div class="section-heading">
+          <p class="eyebrow">Windows onboarding</p>
+          <h2>Connect In Three Steps</h2>
+        </div>
+        <div class="steps">
+          <article>
+            <span>1</span>
+            <h3>Install Outline Client</h3>
+            <p>Use the official Windows client and keep it updated.</p>
+          </article>
+          <article>
+            <span>2</span>
+            <h3>Add Your Access Key</h3>
+            <p>Paste the private key from the portal into Outline Client.</p>
+          </article>
+          <article>
+            <span>3</span>
+            <h3>Verify Your Exit IP</h3>
+            <p>Confirm your visible IP matches the assigned gateway.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section portal-section" id="portal">
+        <div class="section-heading">
+          <p class="eyebrow">Client portal MVP</p>
+          <h2>Access Dashboard</h2>
+        </div>
+        <div class="portal-shell">
+          <aside class="sidebar" aria-label="Portal menu">
+            <button class="tab active" type="button" data-tab="client">Client</button>
+            <button class="tab" type="button" data-tab="admin">Admin</button>
+            <button class="tab" type="button" data-tab="billing">Billing</button>
+          </aside>
+          <div class="portal-panel active" data-panel="client">
+            <div class="panel-header">
+              <div>
+                <span class="label">Access key</span>
+                <h3>windows-client-1</h3>
+              </div>
+              <span class="badge good">Active</span>
+            </div>
+            <div class="key-box">
+              <code id="accessKey">ss://demo-key-hidden-by-design</code>
+              <button class="icon-button" type="button" id="copyKey" aria-label="Copy access key">
+                Copy
+              </button>
+            </div>
+            <div class="panel-grid">
+              <div><span>Gateway</span><strong>35.172.31.23</strong></div>
+              <div><span>Port</span><strong>443</strong></div>
+              <div><span>Protocol</span><strong>TCP/UDP</strong></div>
+              <div><span>Status</span><strong>Ready</strong></div>
+            </div>
+          </div>
+          <div class="portal-panel" data-panel="admin">
+            <div class="panel-header">
+              <div>
+                <span class="label">Server operations</span>
+                <h3>Outline Gateway</h3>
+              </div>
+              <span class="badge">Private API</span>
+            </div>
+            <div class="admin-list">
+              <div><span>Docker health</span><strong>healthy</strong></div>
+              <div><span>UFW</span><strong>restricted admin</strong></div>
+              <div><span>fail2ban</span><strong>enabled</strong></div>
+              <div><span>Backups</span><strong>manual + cron ready</strong></div>
+            </div>
+          </div>
+          <div class="portal-panel" data-panel="billing">
+            <div class="panel-header">
+              <div>
+                <span class="label">Payment flow</span>
+                <h3>Pending Integration</h3>
+              </div>
+              <span class="badge warn">MVP</span>
+            </div>
+            <p class="panel-note">
+              The first production backend should create keys only after a
+              verified payment webhook and revoke them on cancellation.
+            </p>
+            <button class="button secondary" type="button">Stripe/Lemon Squeezy Ready</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="security">
+        <div class="section-heading">
+          <p class="eyebrow">Trust boundary</p>
+          <h2>Privacy Without Guesswork</h2>
+        </div>
+        <div class="security-grid">
+          <article>
+            <h3>Least Exposure</h3>
+            <p>Only access ports stay public; admin surfaces are restricted.</p>
+          </article>
+          <article>
+            <h3>Separate Keys</h3>
+            <p>Each customer gets a revocable Outline access key.</p>
+          </article>
+          <article>
+            <h3>Clear Policy</h3>
+            <p>Designed for authorized privacy use, not policy evasion.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <span>Northline VPN MVP</span>
+      <span>Powered by self-hosted Outline infrastructure</span>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
