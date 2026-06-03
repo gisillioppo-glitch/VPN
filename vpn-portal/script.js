@@ -11,6 +11,8 @@ const nodeReadout = document.querySelector(".node-readout");
 const serverNodes = document.querySelectorAll(".server-node");
 const accessForm = document.querySelector("#accessForm");
 const formStatus = document.querySelector("#formStatus");
+const heroScene = document.querySelector(".ref-hero");
+const heroParticles = document.querySelector(".hero-particles");
 
 let stars = [];
 let pointerX = 0;
@@ -54,9 +56,41 @@ function handlePointer(event) {
   const y = event.clientY / window.innerHeight - 0.5;
   pointerX = x * 36;
   pointerY = y * 24;
+  if (heroScene) {
+    heroScene.style.setProperty("--hero-px", `${x * 20}px`);
+    heroScene.style.setProperty("--hero-py", `${y * 20}px`);
+  }
   if (portal) {
     portal.style.transform = `translate3d(${pointerX * 0.22}px, ${pointerY * 0.16}px, 0) rotateY(${x * 10 - 4}deg) rotateX(${-y * 5}deg)`;
   }
+}
+
+function handleScroll() {
+  if (heroScene) {
+    heroScene.style.setProperty("--hero-sy", `${window.scrollY * 0.25}px`);
+  }
+}
+
+function buildHeroParticles() {
+  if (!heroParticles || heroParticles.childElementCount > 0) return;
+
+  Array.from({ length: 44 }).forEach((_, index) => {
+    const particle = document.createElement("span");
+    const size = (index % 3) + 1;
+    const left = (index * 53) % 100;
+    const duration = 14 + (index % 9) * 2;
+    const delay = index * 0.45;
+    const drift = index % 2 === 0 ? 60 + (index % 5) * 12 : -50 - (index % 7) * 10;
+
+    particle.className = index % 2 === 0 ? "cyan" : "ember";
+    particle.style.left = `${left}%`;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.animationDuration = `${duration}s`;
+    particle.style.animationDelay = `${delay}s`;
+    particle.style.setProperty("--particle-x", `${drift}px`);
+    heroParticles.appendChild(particle);
+  });
 }
 
 const observer = new IntersectionObserver(
@@ -190,5 +224,8 @@ if (copyButton && accessKey) {
 
 window.addEventListener("resize", resizeCanvas);
 window.addEventListener("pointermove", handlePointer);
+window.addEventListener("scroll", handleScroll, { passive: true });
 resizeCanvas();
 renderStars();
+buildHeroParticles();
+handleScroll();
