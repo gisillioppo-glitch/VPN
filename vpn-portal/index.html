@@ -55,7 +55,7 @@
             <div class="avatar-stack" aria-hidden="true">
               <span></span><span></span><span></span>
             </div>
-            <p>Trusted by 2,500+ users worldwide</p>
+            <p>Private beta gateway online · one key per customer</p>
           </div>
         </div>
 
@@ -129,9 +129,9 @@
           </p>
           <a class="button secondary" href="#control">Explore Network <span aria-hidden="true">-></span></a>
           <div class="network-stats">
-            <div><strong>04</strong><span>Active Gateways</span></div>
-            <div><strong>99.98%</strong><span>Network Uptime</span></div>
-            <div><strong>23ms</strong><span>Average Latency</span></div>
+            <div><strong>01</strong><span>Active Gateway</span></div>
+            <div><strong>443</strong><span>TCP / UDP</span></div>
+            <div><strong>Beta</strong><span>Private Access</span></div>
           </div>
         </div>
         <div class="globe-map" aria-label="ORBIT network visualization">
@@ -140,15 +140,24 @@
             <strong>ORBIT</strong>
           </div>
           <svg viewBox="0 0 760 470" aria-hidden="true">
+            <defs>
+              <linearGradient id="networkGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+                <stop offset="0%" stop-color="#157dff" stop-opacity="0.2" />
+                <stop offset="45%" stop-color="#47dfff" stop-opacity="0.95" />
+                <stop offset="100%" stop-color="#157dff" stop-opacity="0.35" />
+              </linearGradient>
+            </defs>
             <path d="M80 260 C210 80, 465 60, 690 180" />
             <path d="M120 350 C290 160, 470 220, 650 330" />
             <path d="M210 180 C300 300, 430 290, 560 140" />
             <path d="M325 390 C380 250, 520 180, 710 270" />
           </svg>
-          <button class="map-node los" type="button">Los Angeles<span>US West</span></button>
-          <button class="map-node ny" type="button">New York<span>US East</span></button>
-          <button class="map-node fra" type="button">Frankfurt<span>UE</span></button>
+          <button class="map-node los" type="button">Los Angeles<span>LA</span></button>
+          <button class="map-node ny" type="button">New York<span>NY</span></button>
+          <button class="map-node fra" type="button">Frankfurt<span>EU</span></button>
           <button class="map-node sg" type="button">Singapore<span>SG</span></button>
+          <button class="map-node london" type="button">London<span>UK</span></button>
+          <button class="map-node syd" type="button">Sydney<span>AU</span></button>
           <button class="map-node low" type="button" aria-label="Relay"></button>
         </div>
       </section>
