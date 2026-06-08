@@ -203,3 +203,57 @@ curl -X POST \
 - Do not commit `backend/data/`; it contains the local customer database.
 - Do not log access URLs in production.
 - For payment automation, create keys only after verified payment webhooks.
+
+## ORBIT Sentinel MVP
+
+Sentinel is the private device visibility layer. It tracks trusted devices and
+security events without exposing a public admin panel.
+
+Create a device enrollment token:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"name":"Fabi Laptop","owner":"fabi","platform":"windows"}' \
+  http://127.0.0.1:8787/api/sentinel/devices
+```
+
+The response includes `device.id` and `deviceToken`. Store the token privately;
+it is not shown again.
+
+Mark the device trusted:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/sentinel/devices/DEVICE_ID/trust
+```
+
+Send a test event from the device:
+
+```bash
+curl -X POST \
+  -H "X-Sentinel-Device-Id: DEVICE_ID" \
+  -H "X-Sentinel-Device-Token: DEVICE_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"severity":"informational","eventType":"agent.started","summary":"Sentinel agent started","details":{"version":"0.1.0"}}' \
+  http://127.0.0.1:8787/api/sentinel/events
+```
+
+List events:
+
+```bash
+curl -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/sentinel/events
+```
+
+Block a device:
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $ADMIN_TOKEN" \
+  http://127.0.0.1:8787/api/sentinel/devices/DEVICE_ID/block
+```
+
+Full architecture notes live in `docs/orbit-sentinel-architecture.md`.

@@ -9,6 +9,7 @@ import { createClientsRouter } from "./routes/clients.js";
 import { createHealthRouter } from "./routes/health.js";
 import { createKeysRouter } from "./routes/keys.js";
 import { createRequestsRouter } from "./routes/requests.js";
+import { createSentinelRouter } from "./routes/sentinel.js";
 
 const config = getConfig();
 const outlineClient = new OutlineClient({ apiUrl: config.outlineApiUrl });
@@ -41,6 +42,7 @@ app.get("/", (_req, res) => {
 app.use("/health", createHealthRouter({ outlineClient, authMiddleware }));
 app.use("/api/requests", createRequestsRouter({ db, emailService, config }));
 app.use("/api/keys", authMiddleware, createKeysRouter({ outlineClient, config }));
+app.use("/api/sentinel", createSentinelRouter({ db, authMiddleware }));
 app.use(
   "/api/clients",
   authMiddleware,
