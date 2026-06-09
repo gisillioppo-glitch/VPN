@@ -292,3 +292,64 @@ curl -X POST \
 
 The cooldown is per device, severity, and event type. It prevents repeated
 identical events from sending alert emails every few seconds.
+
+## Sentinel Telegram Alerts
+
+Telegram alerts are the quickest notification channel for the private MVP
+because they do not require a custom domain.
+
+Create a bot:
+
+1. Open Telegram.
+2. Message `@BotFather`.
+3. Run `/newbot`.
+4. Copy the bot token.
+5. Send any message to your new bot so it can see your chat.
+6. Get your chat id from:
+
+```text
+https://api.telegram.org/botBOT_TOKEN/getUpdates
+```
+
+Configure `.env` on the VPS:
+
+```text
+TELEGRAM_BOT_TOKEN=...
+TELEGRAM_CHAT_ID=...
+SENTINEL_ALERT_SEVERITIES=critical
+```
+
+Restart:
+
+```bash
+sudo systemctl restart orbit-backend
+```
+
+Test:
+
+```bash
+DEVICE_TOKEN="$(jq -r '.deviceToken' /tmp/sentinel-device-new.json)"
+
+curl -s -X POST \
+  -H "X-Sentinel-Device-Id: 2" \
+  -H "X-Sentinel-Device-Token: $DEVICE_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"severity":"critical","eventType":"test.telegram","summary":"Manual Telegram alert test","details":{"source":"manual-test"}}' \
+  http://127.0.0.1:8787/api/sentinel/events | jq
+```
+
+Expected:
+
+```json
+{
+  "alert": {
+    "sent": true,
+    "channels": {
+      "telegram": {"sent": true}
+    }
+  }
+}
+```
+
+Keep the bot token private. If it leaks, revoke it in BotFather and update the
+server `.env`.

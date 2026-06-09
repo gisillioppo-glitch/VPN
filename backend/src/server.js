@@ -10,11 +10,13 @@ import { createHealthRouter } from "./routes/health.js";
 import { createKeysRouter } from "./routes/keys.js";
 import { createRequestsRouter } from "./routes/requests.js";
 import { createSentinelRouter } from "./routes/sentinel.js";
+import { createTelegramService } from "./telegramService.js";
 
 const config = getConfig();
 const outlineClient = new OutlineClient({ apiUrl: config.outlineApiUrl });
 const db = await openDatabase({ dbPath: config.dbPath });
 const emailService = createEmailService(config);
+const telegramService = createTelegramService(config);
 const authMiddleware = requireAdminToken(config);
 const app = express();
 
@@ -42,7 +44,10 @@ app.get("/", (_req, res) => {
 app.use("/health", createHealthRouter({ outlineClient, authMiddleware }));
 app.use("/api/requests", createRequestsRouter({ db, emailService, config }));
 app.use("/api/keys", authMiddleware, createKeysRouter({ outlineClient, config }));
-app.use("/api/sentinel", createSentinelRouter({ db, authMiddleware, config, emailService }));
+app.use(
+  "/api/sentinel",
+  createSentinelRouter({ db, authMiddleware, config, emailService, telegramService })
+);
 app.use(
   "/api/clients",
   authMiddleware,

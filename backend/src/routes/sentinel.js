@@ -45,7 +45,19 @@ function getCooldownKey(event) {
   return `${event.deviceId}:${event.severity}:${event.eventType}`;
 }
 
-async function maybeSendSentinelAlert({ config, db, emailService, event }) {
+async function sendAlertChannel(name, sendFn) {
+  try {
+    return await sendFn();
+  } catch (error) {
+    return {
+      sent: false,
+      reason: `${name}_error`,
+      error: error instanceof Error ? error.message : `Unknown ${name} error`,
+    };
+  }
+}
+
+async function maybeSendSentinelAlert({ config, db, emailService, telegramService, event }) {
   if (!shouldSendAlert(config, event)) {
     return { sent: false, reason: "severity_not_configured" };
   }
@@ -57,18 +69,23 @@ async function maybeSendSentinelAlert({ config, db, emailService, event }) {
     return { sent: false, reason: "cooldown_active" };
   }
 
-  try {
-    const device = await db.getSentinelDevice(event.deviceId);
-    const result = await emailService.sendSentinelAlert({ device, event });
-    if (result.sent) alertCooldowns.set(cooldownKey, now);
-    return result;
-  } catch (error) {
-    return {
-      sent: false,
-      reason: "email_error",
-      error: error instanceof Error ? error.message : "Unknown email error",
-    };
-  }
+  const device = await db.getSentinelDevice(event.deviceId);
+  const email = await sendAlertChannel("email", () =>
+    emailService.sendSentinelAlert({ device, event })
+  );
+  const telegram = await sendAlertChannel("telegram", () =>
+    telegramService.sendSentinelAlert({ device, event })
+  );
+  const sent = Boolean(email.sent || telegram.sent);
+  if (sent) alertCooldowns.set(cooldownKey, now);
+
+  return {
+    sent,
+    channels: {
+      email,
+      telegram,
+    },
+  };
 }
 
 async function requireDeviceToken(req, res, next) {
@@ -96,7 +113,13 @@ async function requireDeviceToken(req, res, next) {
   }
 }
 
-export function createSentinelRouter({ db, authMiddleware, config, emailService }) {
+export function createSentinelRouter({
+  db,
+  authMiddleware,
+  config,
+  emailService,
+  telegramService,
+}) {
   const router = express.Router();
 
   router.use((req, _res, next) => {
@@ -211,6 +234,7 @@ export function createSentinelRouter({ db, authMiddleware, config, emailService 
         config,
         db,
         emailService,
+        telegramService,
         event: normalizedEvent,
       });
 
