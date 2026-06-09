@@ -46,7 +46,12 @@ Set-Content -LiteralPath $configPath -Value $config -Encoding UTF8
 $acl = Get-Acl -LiteralPath $configPath
 $acl.SetAccessRuleProtection($true, $false)
 $acl.Access | ForEach-Object { $acl.RemoveAccessRule($_) | Out-Null }
-foreach ($account in @("$env:USERDOMAIN\$env:USERNAME", "BUILTIN\Administrators", "NT AUTHORITY\SYSTEM")) {
+
+$currentUserSid = [Security.Principal.WindowsIdentity]::GetCurrent().User
+$adminSid = New-Object Security.Principal.SecurityIdentifier("S-1-5-32-544")
+$systemSid = New-Object Security.Principal.SecurityIdentifier("S-1-5-18")
+
+foreach ($account in @($currentUserSid, $adminSid, $systemSid)) {
   $rule = New-Object System.Security.AccessControl.FileSystemAccessRule(
     $account,
     "Read",
