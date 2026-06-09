@@ -7,5 +7,7 @@ exports/
 backups/
 *.tar.gz
 *.log
+sentinel/agent/windows/config.json
+sentinel/agent/windows/*.local.json
 .DS_Store
 Thumbs.db
