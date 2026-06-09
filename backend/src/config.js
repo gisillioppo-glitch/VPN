@@ -19,6 +19,12 @@ export function getConfig() {
     resendApiKey: process.env.RESEND_API_KEY || "",
     emailFrom: process.env.EMAIL_FROM || "",
     adminNotifyEmail: process.env.ADMIN_NOTIFY_EMAIL || "",
+    sentinelAlertEmail: process.env.SENTINEL_ALERT_EMAIL || process.env.ADMIN_NOTIFY_EMAIL || "",
+    sentinelAlertSeverities: (process.env.SENTINEL_ALERT_SEVERITIES || "critical")
+      .split(",")
+      .map((severity) => severity.trim())
+      .filter(Boolean),
+    sentinelAlertCooldownMs: Number(process.env.SENTINEL_ALERT_COOLDOWN_MS || 15 * 60 * 1000),
     publicRequestWindowMs: Number(process.env.PUBLIC_REQUEST_WINDOW_MS || 60 * 60 * 1000),
     publicRequestMaxPerWindow: Number(process.env.PUBLIC_REQUEST_MAX_PER_WINDOW || 5),
   };

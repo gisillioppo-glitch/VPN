@@ -79,5 +79,31 @@ Client ID: ${client.id}
 Status: ${client.status}
 `,
       }),
+
+    sendSentinelAlert: ({ device, event }) =>
+      sendEmail(config, {
+        to: config.sentinelAlertEmail,
+        subject: `${config.brandName}: Sentinel ${event.severity} alert`,
+        text: `ORBIT Sentinel alert
+
+Severity: ${event.severity}
+Event: ${event.eventType}
+Summary: ${event.summary}
+Time: ${event.createdAt}
+
+Device:
+- ID: ${device.id}
+- Name: ${device.name}
+- Owner: ${device.owner}
+- Platform: ${device.platform}
+- Status: ${device.status}
+- Trust score: ${device.trustScore}
+
+Observed source IP: ${event.sourceIp || "unknown"}
+
+Recommended action:
+Open the Sentinel timeline, verify whether this was expected, and inspect the device if it was not.
+`,
+      }),
   };
 }

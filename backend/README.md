@@ -257,3 +257,38 @@ curl -X POST \
 ```
 
 Full architecture notes live in `docs/orbit-sentinel-architecture.md`.
+
+## Sentinel Email Alerts
+
+Sentinel can email the owner when matching events arrive. By default, only
+`critical` events are alert-worthy.
+
+Configure email in `.env`:
+
+```text
+RESEND_API_KEY=...
+EMAIL_FROM=ORBIT Sentinel <alerts@your-domain.example>
+SENTINEL_ALERT_EMAIL=owner@example.com
+SENTINEL_ALERT_SEVERITIES=critical
+SENTINEL_ALERT_COOLDOWN_MS=900000
+```
+
+If email is not configured, events are still stored and the API returns:
+
+```json
+{"sent":false,"reason":"email_not_configured"}
+```
+
+Test a critical event from an enrolled device:
+
+```bash
+curl -X POST \
+  -H "X-Sentinel-Device-Id: DEVICE_ID" \
+  -H "X-Sentinel-Device-Token: DEVICE_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"severity":"critical","eventType":"test.critical","summary":"Manual critical alert test","details":{"source":"manual-test"}}' \
+  http://127.0.0.1:8787/api/sentinel/events
+```
+
+The cooldown is per device, severity, and event type. It prevents repeated
+identical events from sending alert emails every few seconds.

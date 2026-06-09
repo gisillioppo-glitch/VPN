@@ -42,7 +42,7 @@ app.get("/", (_req, res) => {
 app.use("/health", createHealthRouter({ outlineClient, authMiddleware }));
 app.use("/api/requests", createRequestsRouter({ db, emailService, config }));
 app.use("/api/keys", authMiddleware, createKeysRouter({ outlineClient, config }));
-app.use("/api/sentinel", createSentinelRouter({ db, authMiddleware }));
+app.use("/api/sentinel", createSentinelRouter({ db, authMiddleware, config, emailService }));
 app.use(
   "/api/clients",
   authMiddleware,

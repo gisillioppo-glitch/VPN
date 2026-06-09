@@ -3,6 +3,7 @@ import express from "express";
 
 const VALID_STATUSES = new Set(["pending", "trusted", "blocked"]);
 const VALID_SEVERITIES = new Set(["informational", "suspicious", "critical"]);
+const alertCooldowns = new Map();
 
 function hashToken(token) {
   return crypto.createHash("sha256").update(token, "utf8").digest("hex");
@@ -36,6 +37,40 @@ function getSourceIp(req) {
   return req.socket.remoteAddress || "";
 }
 
+function shouldSendAlert(config, event) {
+  return config.sentinelAlertSeverities.includes(event.severity);
+}
+
+function getCooldownKey(event) {
+  return `${event.deviceId}:${event.severity}:${event.eventType}`;
+}
+
+async function maybeSendSentinelAlert({ config, db, emailService, event }) {
+  if (!shouldSendAlert(config, event)) {
+    return { sent: false, reason: "severity_not_configured" };
+  }
+
+  const now = Date.now();
+  const cooldownKey = getCooldownKey(event);
+  const lastSentAt = alertCooldowns.get(cooldownKey) || 0;
+  if (now - lastSentAt < config.sentinelAlertCooldownMs) {
+    return { sent: false, reason: "cooldown_active" };
+  }
+
+  try {
+    const device = await db.getSentinelDevice(event.deviceId);
+    const result = await emailService.sendSentinelAlert({ device, event });
+    if (result.sent) alertCooldowns.set(cooldownKey, now);
+    return result;
+  } catch (error) {
+    return {
+      sent: false,
+      reason: "email_error",
+      error: error instanceof Error ? error.message : "Unknown email error",
+    };
+  }
+}
+
 async function requireDeviceToken(req, res, next) {
   try {
     const deviceId = Number(req.get("X-Sentinel-Device-Id") || "");
@@ -61,7 +96,7 @@ async function requireDeviceToken(req, res, next) {
   }
 }
 
-export function createSentinelRouter({ db, authMiddleware }) {
+export function createSentinelRouter({ db, authMiddleware, config, emailService }) {
   const router = express.Router();
 
   router.use((req, _res, next) => {
@@ -171,7 +206,15 @@ export function createSentinelRouter({ db, authMiddleware }) {
         details,
       });
 
-      res.status(201).json({ event: normalizeEvent(event) });
+      const normalizedEvent = normalizeEvent(event);
+      const alert = await maybeSendSentinelAlert({
+        config,
+        db,
+        emailService,
+        event: normalizedEvent,
+      });
+
+      res.status(201).json({ event: normalizedEvent, alert });
     } catch (error) {
       next(error);
     }
