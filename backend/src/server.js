@@ -4,6 +4,7 @@ import { getConfig } from "./config.js";
 import { openDatabase } from "./database.js";
 import { createEmailService } from "./emailService.js";
 import { requireAdminToken } from "./middleware/auth.js";
+import { createNtfyService } from "./ntfyService.js";
 import { OutlineClient } from "./outlineClient.js";
 import { createClientsRouter } from "./routes/clients.js";
 import { createHealthRouter } from "./routes/health.js";
@@ -16,6 +17,7 @@ const config = getConfig();
 const outlineClient = new OutlineClient({ apiUrl: config.outlineApiUrl });
 const db = await openDatabase({ dbPath: config.dbPath });
 const emailService = createEmailService(config);
+const ntfyService = createNtfyService(config);
 const telegramService = createTelegramService(config);
 const authMiddleware = requireAdminToken(config);
 const app = express();
@@ -46,7 +48,14 @@ app.use("/api/requests", createRequestsRouter({ db, emailService, config }));
 app.use("/api/keys", authMiddleware, createKeysRouter({ outlineClient, config }));
 app.use(
   "/api/sentinel",
-  createSentinelRouter({ db, authMiddleware, config, emailService, telegramService })
+  createSentinelRouter({
+    db,
+    authMiddleware,
+    config,
+    emailService,
+    telegramService,
+    ntfyService,
+  })
 );
 app.use(
   "/api/clients",

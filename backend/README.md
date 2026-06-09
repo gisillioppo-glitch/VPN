@@ -353,3 +353,69 @@ Expected:
 
 Keep the bot token private. If it leaks, revoke it in BotFather and update the
 server `.env`.
+
+## Sentinel ntfy Alerts
+
+ntfy is the fastest personal alert channel when Telegram or email are not an
+option. It can use the public `ntfy.sh` server or a self-hosted ntfy server
+later.
+
+For privacy, do not use a readable topic like `orbit` or `fabi-alerts`. Use a
+long random topic that cannot be guessed.
+
+Generate a private topic on the VPS:
+
+```bash
+openssl rand -hex 32
+```
+
+Configure `.env`:
+
+```text
+NTFY_BASE_URL=https://ntfy.sh
+NTFY_TOPIC=the-long-random-topic
+SENTINEL_ALERT_SEVERITIES=critical
+```
+
+Install the ntfy app on your phone or open:
+
+```text
+https://ntfy.sh/the-long-random-topic
+```
+
+Subscribe to that exact topic.
+
+Restart:
+
+```bash
+sudo systemctl restart orbit-backend
+```
+
+Test:
+
+```bash
+DEVICE_TOKEN="$(jq -r '.deviceToken' /tmp/sentinel-device-new.json)"
+
+curl -s -X POST \
+  -H "X-Sentinel-Device-Id: 2" \
+  -H "X-Sentinel-Device-Token: $DEVICE_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"severity":"critical","eventType":"test.ntfy","summary":"Manual ntfy alert test","details":{"source":"manual-test"}}' \
+  http://127.0.0.1:8787/api/sentinel/events | jq
+```
+
+Expected:
+
+```json
+{
+  "alert": {
+    "sent": true,
+    "channels": {
+      "ntfy": {"sent": true}
+    }
+  }
+}
+```
+
+Public ntfy topics are protected by obscurity unless you use an authenticated or
+self-hosted ntfy server. Keep messages minimal and treat the topic like a secret.

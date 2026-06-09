@@ -57,7 +57,14 @@ async function sendAlertChannel(name, sendFn) {
   }
 }
 
-async function maybeSendSentinelAlert({ config, db, emailService, telegramService, event }) {
+async function maybeSendSentinelAlert({
+  config,
+  db,
+  emailService,
+  telegramService,
+  ntfyService,
+  event,
+}) {
   if (!shouldSendAlert(config, event)) {
     return { sent: false, reason: "severity_not_configured" };
   }
@@ -76,7 +83,10 @@ async function maybeSendSentinelAlert({ config, db, emailService, telegramServic
   const telegram = await sendAlertChannel("telegram", () =>
     telegramService.sendSentinelAlert({ device, event })
   );
-  const sent = Boolean(email.sent || telegram.sent);
+  const ntfy = await sendAlertChannel("ntfy", () =>
+    ntfyService.sendSentinelAlert({ device, event })
+  );
+  const sent = Boolean(email.sent || telegram.sent || ntfy.sent);
   if (sent) alertCooldowns.set(cooldownKey, now);
 
   return {
@@ -84,6 +94,7 @@ async function maybeSendSentinelAlert({ config, db, emailService, telegramServic
     channels: {
       email,
       telegram,
+      ntfy,
     },
   };
 }
@@ -119,6 +130,7 @@ export function createSentinelRouter({
   config,
   emailService,
   telegramService,
+  ntfyService,
 }) {
   const router = express.Router();
 
@@ -235,6 +247,7 @@ export function createSentinelRouter({
         db,
         emailService,
         telegramService,
+        ntfyService,
         event: normalizedEvent,
       });
 

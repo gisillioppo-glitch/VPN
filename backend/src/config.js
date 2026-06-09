@@ -27,6 +27,9 @@ export function getConfig() {
     sentinelAlertCooldownMs: Number(process.env.SENTINEL_ALERT_COOLDOWN_MS || 15 * 60 * 1000),
     telegramBotToken: process.env.TELEGRAM_BOT_TOKEN || "",
     telegramChatId: process.env.TELEGRAM_CHAT_ID || "",
+    ntfyBaseUrl: (process.env.NTFY_BASE_URL || "https://ntfy.sh").replace(/\/+$/, ""),
+    ntfyTopic: process.env.NTFY_TOPIC || "",
+    ntfyToken: process.env.NTFY_TOKEN || "",
     publicRequestWindowMs: Number(process.env.PUBLIC_REQUEST_WINDOW_MS || 60 * 60 * 1000),
     publicRequestMaxPerWindow: Number(process.env.PUBLIC_REQUEST_MAX_PER_WINDOW || 5),
   };
