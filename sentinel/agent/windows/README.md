@@ -33,6 +33,10 @@ http://127.0.0.1:8787
 
 Later, this can move to Cloudflare Tunnel or another HTTPS access layer.
 
+For a stable private MVP without a domain, install the automatic tunnel task.
+It keeps `127.0.0.1:8787` connected to the private backend without leaving a
+PowerShell window open.
+
 ## Install
 
 Run PowerShell as Administrator from this folder:
@@ -58,6 +62,48 @@ ORBIT Sentinel Agent
 
 The task runs at logon and then every 15 minutes while the user session is
 available.
+
+## Install Automatic SSH Tunnel
+
+Run PowerShell as Administrator from this folder:
+
+```powershell
+.\install-tunnel.ps1 `
+  -SshKeyPath "$env:USERPROFILE\OneDrive\Escritorio\VPN Data\LightsailDefaultKey-us-east-1.pem"
+```
+
+The installer copies the tunnel helper to:
+
+```text
+C:\ProgramData\OrbitSentinel\sentinel-tunnel.ps1
+```
+
+It also creates a scheduled task named:
+
+```text
+ORBIT Sentinel Tunnel
+```
+
+The task runs at logon and every 5 minutes. If the local tunnel is already
+active, it exits quietly. If the tunnel is down, it starts `ssh.exe` hidden.
+
+Manual tunnel run:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "$env:ProgramData\OrbitSentinel\sentinel-tunnel.ps1"
+```
+
+Verify local API through the tunnel:
+
+```powershell
+curl.exe http://127.0.0.1:8787/health
+```
+
+Expected:
+
+```json
+{"status":"ok","service":"orbit-outline-backend"}
+```
 
 ## Manual Run
 
@@ -86,3 +132,6 @@ curl -s -H "Authorization: Bearer $ADMIN_TOKEN" \
 - If a token leaks, block the device and enroll a new one.
 - Keep the API private until HTTPS and an explicit access layer are configured.
 - The agent is defensive and owner-authorized only.
+- The SSH key path in `tunnel-config.json` is sensitive because it points to
+  the private VPS key. Keep `C:\ProgramData\OrbitSentinel` readable only by the
+  owner, administrators, and SYSTEM.
