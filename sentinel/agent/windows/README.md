@@ -61,7 +61,7 @@ ORBIT Sentinel Agent
 ```
 
 The task runs at logon and then every 15 minutes while the user session is
-available.
+available. It runs hidden and should not open visible PowerShell windows.
 
 ## Install Automatic SSH Tunnel
 
@@ -86,6 +86,23 @@ ORBIT Sentinel Tunnel
 
 The task runs at logon and every 5 minutes. If the local tunnel is already
 active, it exits quietly. If the tunnel is down, it starts `ssh.exe` hidden.
+It also runs hidden and should not open visible PowerShell windows.
+
+## Hide Existing Scheduled Tasks
+
+If the agent or tunnel was installed before hidden mode was added, run this once
+from PowerShell as Administrator:
+
+```powershell
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File ".\update-tasks-hidden.ps1"
+```
+
+Then confirm:
+
+```powershell
+Get-ScheduledTask -TaskName "ORBIT Sentinel Agent","ORBIT Sentinel Tunnel" |
+  Select-Object TaskName,State
+```
 
 Manual tunnel run:
 

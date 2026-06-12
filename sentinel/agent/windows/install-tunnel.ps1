@@ -72,7 +72,7 @@ Protect-ConfigFile -Path $configPath
 
 $action = New-ScheduledTaskAction `
   -Execute "powershell.exe" `
-  -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$tunnelPath`""
+  -Argument "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$tunnelPath`""
 
 $logonTrigger = New-ScheduledTaskTrigger -AtLogOn
 $intervalTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(1) `

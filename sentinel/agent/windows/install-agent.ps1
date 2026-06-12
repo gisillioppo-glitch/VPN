@@ -63,7 +63,7 @@ Set-Acl -LiteralPath $configPath -AclObject $acl
 
 $action = New-ScheduledTaskAction `
   -Execute "powershell.exe" `
-  -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$agentPath`""
+  -Argument "-NoProfile -NonInteractive -WindowStyle Hidden -ExecutionPolicy Bypass -File `"$agentPath`""
 
 $logonTrigger = New-ScheduledTaskTrigger -AtLogOn
 $intervalTrigger = New-ScheduledTaskTrigger -Once -At (Get-Date).AddMinutes(2) `
